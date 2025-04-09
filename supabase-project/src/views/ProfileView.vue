@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import {ref, onMounted} from 'vue'
-import {supabase} from  '../supabaseClient.js'
+import { ref, onMounted } from 'vue'
+import { supabase } from '../supabaseClient.js'
 
 const profiles = ref([])
 
-async function getProfiles(){
-  const {data} = await supabase.from('profiles').select()
+async function getProfiles() {
+  const { data } = await supabase.from('profiles').select()
   profiles.value = data
 }
 
