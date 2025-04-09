@@ -14,7 +14,7 @@ export const supabase = createClient(
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
+<RouterView>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/reviews">Reviews</RouterLink>
@@ -22,10 +22,9 @@ export const supabase = createClient(
         <RouterLink to="/posts">Posts</RouterLink>
         <RouterLink to="/profile">Profile</RouterLink>
       </nav>
+        </RouterView>
     </div>
   </header>
-
-  <RouterView />
 </template>
 
 <style scoped>
