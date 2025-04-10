@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import {ref, onMounted} from 'vue'
-import {supabase} from  '../supabaseClient.js'
+import { ref, onMounted } from 'vue'
+import { supabase } from '../supabaseClient.js'
 
 const posts = ref([])
 
-async function getPosts(){
-  const {data} = await supabase.from('posts').select()
+async function getPosts() {
+  const { data } = await supabase.from('posts').select()
   posts.value = data
 }
 
@@ -28,4 +28,3 @@ onMounted(() => {
   }
 }
 </style>
-

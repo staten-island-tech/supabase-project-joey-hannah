@@ -1,9 +1,11 @@
+<template>
+  <div>
+    <AccCreation />
+  </div>
+</template>
+
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import AccCreation from '../components/AccCreation.vue'
 </script>
 
-<template>
-  <main>
-    <TheWelcome />
-  </main>
-</template>
+<style lang="scss" scoped></style>
