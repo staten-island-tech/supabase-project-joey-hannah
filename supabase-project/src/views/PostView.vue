@@ -6,7 +6,6 @@
 
 <script>
 import {ref, onMounted} from 'vue'
-import {supabase} from  '../supabaseClient.js'
 
 const posts = ref([])
 
