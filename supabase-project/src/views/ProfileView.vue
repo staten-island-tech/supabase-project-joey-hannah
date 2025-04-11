@@ -13,21 +13,16 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
-const profiles = ref([]);
+const profiles = ref([])
 
 async function getProfiles() {
-<<<<<<< HEAD
   const { data } = await supabase.from('profiles').select()
   profiles.value = data
-=======
-  const { data } = await supabase.from('profiles').select();
-   profiles.value = data;
->>>>>>> hannahbranch
 }
 
 onMounted(() => {
-  getProfiles();
-});
+  getProfiles()
+})
 </script>
 
 <style scoped>
