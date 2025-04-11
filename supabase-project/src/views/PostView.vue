@@ -5,8 +5,12 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
+=======
+import {ref, onMounted} from 'vue'
+>>>>>>> hannahbranch
 
 const posts = ref([])
 
