@@ -9,7 +9,6 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-<RouterView>
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/reviews">Reviews</RouterLink>
@@ -17,7 +16,7 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/posts">Posts</RouterLink>
         <RouterLink to="/profile">Profile</RouterLink>
       </nav>
-        </RouterView>
+      <RouterView />
     </div>
   </header>
 </template>
