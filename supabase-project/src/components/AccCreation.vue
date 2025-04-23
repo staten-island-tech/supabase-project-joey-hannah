@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="create-acc">
+    <h2>Create Account</h2>
     <form @submit.prevent="createUser">
       <label for="username">Username</label>
       <input type="text" v-model="username" />
