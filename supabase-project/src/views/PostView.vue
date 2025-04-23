@@ -1,12 +1,14 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <PostSetup  />
+  
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
+import PostSetup from '@/components/PostSetup.vue'
 
 const posts = ref([])
 
@@ -19,6 +21,8 @@ onMounted(() => {
   getPosts()
 })
 </script>
+
+
 <style>
 @media (min-width: 1024px) {
   .about {
@@ -28,3 +32,5 @@ onMounted(() => {
   }
 }
 </style>
+
+

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="loggedIn">
     <form @submit.prevent="createPost">
       <label for="image_url">Link to Image</label>
       <input type="text" v-model="image_url" />
@@ -18,11 +18,21 @@ import { supabase } from '../supabaseClient.js'
 
 const image_url = ref('')
 const caption = ref('')
+const loggedIn = ref(true)
 
-function createPost{
+
+async function createPost(){
   const { error } = await supabase
   .from('posts')
   .insert({ image_url: image_url.value, caption: caption.value })
+
+  if (error) {
+    console.error('Error creating post:', error.message)
+  } else {
+    console.log('Post created successfully!')
+    image_url.value = ''
+    caption.value = ''
+  }
 }
 
 
