@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="create-acc">
+    <h2>Create Account</h2>
     <form @submit.prevent="createUser">
       <label for="username">Username</label>
       <input type="text" v-model="username" />
@@ -32,6 +33,7 @@ const createUser = async () => {
   errorMessage.value = ''
 
   const { data, error } = await supabase.auth.signUp({
+    display_name: username.value,
     email: email.value,
     password: password.value,
   })
@@ -42,6 +44,17 @@ const createUser = async () => {
   }
 
   const user = data.user
+
+  if (user) {
+    const { error: updateError } = await supabase.auth.updateUser({
+      data: { display_name: username.value },
+    })
+
+    if (updateError) {
+      errorMessage.value = 'Error updating user metadata: ' + updateError.message
+      return
+    }
+  }
 
   if (user) {
     const { error: insertError } = await supabase.from('Profile').insert([

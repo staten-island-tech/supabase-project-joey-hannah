@@ -10,14 +10,24 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
+=======
+import { ref, onMounted } from 'vue';
+import { supabase } from '../supabaseClient.js'; 
+>>>>>>> main
 
 const profiles = ref([]);
 
 async function getProfiles() {
+<<<<<<< HEAD
   const { data } = await supabase.from('profiles').select()
   profiles.value = data
+=======
+  const { data } = await supabase.from('profiles').select(); 
+   profiles.value = data; 
+>>>>>>> main
 }
 
 onMounted(() => {
