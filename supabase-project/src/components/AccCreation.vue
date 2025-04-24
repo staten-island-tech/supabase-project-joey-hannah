@@ -32,8 +32,7 @@ const errorMessage = ref('')
 const createUser = async () => {
   errorMessage.value = ''
 
-  const { data, error } = await supabase.auth.signUp({
-    display_name: username.value,
+  const { data: userData, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
   })
@@ -43,35 +42,20 @@ const createUser = async () => {
     return
   }
 
-  const user = data.user
+  const user = userData.user
 
   if (user) {
-    const { error: updateError } = await supabase.auth.updateUser({
-      data: { display_name: username.value },
+    const { error: profileError } = await supabase.from('profile').insert({
+      id: user.id,
+      username: username,
+      email: email,
     })
-
-    if (updateError) {
+    if (profileError) {
       errorMessage.value = 'Error updating user metadata: ' + updateError.message
       return
     }
   }
-
-  if (user) {
-    const { error: insertError } = await supabase.from('Profile').insert([
-      {
-        id: user.id,
-        username: username.value,
-        email: email.value,
-      },
-    ])
-
-    if (insertError) {
-      errorMessage.value = 'Insert failed: ' + insertError.message
-      return
-    }
-
-    loggedIn.value = true
-  }
+  loggedIn.value = true
 }
 </script>
 
