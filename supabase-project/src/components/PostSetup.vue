@@ -9,6 +9,7 @@
 
       <button type="submit">Create Post</button>
     </form>
+    <h1 v-if="success">Post created successfully!</h1>
   </div>
 </template>
 
@@ -18,18 +19,21 @@ import { supabase } from '../supabaseClient.js'
 
 const image_url = ref('')
 const caption = ref('')
+const success = ref()
 const loggedIn = ref(true)
+
 
 
 async function createPost(){
   const { error } = await supabase
   .from('posts')
-  .insert({ image_url: image_url.value, caption: caption.value })
+.insert([{ image_url: image_url.value, caption: caption.value }])
 
   if (error) {
     console.error('Error creating post:', error.message)
+    success.value = false;
   } else {
-    console.log('Post created successfully!')
+    success.value = true
     image_url.value = ''
     caption.value = ''
   }
