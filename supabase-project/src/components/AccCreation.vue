@@ -42,17 +42,22 @@ const createUser = async () => {
     return
   }
 
-  const user = userData.user
+const user = userData?.user
 
   if (user) {
-    const { error: profileError } = await supabase.from('profile').insert({
-      id: user.id,
-      username: username,
-      email: email,
-    })
-    if (profileError) {
-      errorMessage.value = 'Error updating user metadata: ' + updateError.message
-      return
+    const { error: insertError } = await supabase
+      .from('profile')
+      .insert([
+        {
+          email: email.value,
+          username: username.value,
+        },
+      ])
+
+    if (insertError) {
+      errorMessage.value = 'Profile insert failed: ' + insertError.message
+    } else {
+      loggedIn.value = true
     }
   }
   loggedIn.value = true

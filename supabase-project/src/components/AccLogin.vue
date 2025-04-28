@@ -36,8 +36,6 @@ const loginUser = async () => {
   }
   loggedIn.value = true
 }
-
-
 </script>
 
 <style scoped>
