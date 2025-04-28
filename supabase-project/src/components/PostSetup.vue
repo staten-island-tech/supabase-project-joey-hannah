@@ -28,7 +28,7 @@ async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''  
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('posts')
     .insert([
       {
