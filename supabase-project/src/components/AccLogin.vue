@@ -1,6 +1,6 @@
 <template>
   <div class="acc-login">
-    <h2>Or LogIn</h2>
+    <h2>Or Log In</h2>
     <form @submit.prevent="loginUser">
       <label for="email">Email</label>
       <input type="text" v-model="email" />
@@ -29,7 +29,6 @@ const loginUser = async () => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email.value,
     password: password.value,
-    username: username.value,
   })
   if (error) {
     errorMessage.value = 'Login failed: ' + error.message
