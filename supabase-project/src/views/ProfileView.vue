@@ -1,19 +1,21 @@
 <template>
   <div>
     <h1 v-if="profiles.length">Profiles:</h1>
-      <li v-for="profile in profiles" :key="profile.id">
-        <h2>{{ profile.username }}</h2>
-        <p>{{ profile.name }}</p>
-        <img :src="profile.profile_pic" alt="Profile Picture"/>
-      </li>
+    <li v-for="profile in profiles" :key="profile.id">
+      <h2>{{ profile.username }}</h2>
+      <p>{{ profile.name }}</p>
+      <img :src="profile.profile_pic" alt="Profile Picture" />
+    </li>
+    <ProfilePage />
   </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
+import ProfilePage from '@/components/ProfilePage.vue'
 
-const profiles = ref([]);
+const profiles = ref([])
 
 async function getProfiles() {
   const { data } = await supabase.from('profiles').select()
@@ -21,8 +23,8 @@ async function getProfiles() {
 }
 
 onMounted(() => {
-  getProfiles();
-});
+  getProfiles()
+})
 </script>
 
 <style scoped>
