@@ -32,33 +32,15 @@ const errorMessage = ref('')
 const createUser = async () => {
   errorMessage.value = ''
 
-  const { data: userData, error } = await supabase.auth.signUp({
+  const {  error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
+    
   })
 
   if (error) {
     errorMessage.value = 'Signup failed: ' + error.message
     return
-  }
-
-const user = userData?.user
-
-  if (user) {
-    const { error: insertError } = await supabase
-      .from('profile')
-      .insert([
-        {
-          email: email.value,
-          username: username.value,
-        },
-      ])
-
-    if (insertError) {
-      errorMessage.value = 'Profile insert failed: ' + insertError.message
-    } else {
-      loggedIn.value = true
-    }
   }
   loggedIn.value = true
 }
