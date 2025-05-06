@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 import ProfilePage from '@/components/ProfilePage.vue'
