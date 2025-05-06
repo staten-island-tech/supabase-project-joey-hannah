@@ -2,12 +2,12 @@
   <div v-if="loggedIn">
     <form @submit.prevent="createProfilePage">
       <label for="fav_artist">Favorite Artist</label>
-      <input type="image" v-model="fav_artist" />
+      <input type="file" @change="onFileSelected" />
 
       <label for="lyric">Lyrics</label>
       <input type="text" v-model="lyric" />
       <label for="fav_album">Favorite Album</label>
-      <input type="image" v-model="fav_album" />
+      <input type="file" @change="onFileSelected" />
 
       <label for="lyric">Bio</label>
       <input type="text" v-model="bio" />
@@ -30,6 +30,15 @@ const bio = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
+const file = ref(null)
+
+function onFileSelected(event) {
+  const files = event.target.files
+  if (files.length) {
+    file.value = files[0]
+    console.log('Selected file:', file.value.name)
+  }
+}
 
 async function createProfilePage() {
   successMessage.value = ''
