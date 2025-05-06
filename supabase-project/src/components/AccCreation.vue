@@ -35,6 +35,7 @@ const createUser = async () => {
   const {  error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
+    username: username.value,
     
   })
 
@@ -54,4 +55,4 @@ form {
   max-width: 300px;
   padding: 2px;
 }
-</style>
+</style> 

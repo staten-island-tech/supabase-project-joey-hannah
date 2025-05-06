@@ -1,14 +1,17 @@
 <template>
   <div class="about">
-    <PostSetup  />
-  
+    <div v-for="post in posts" :key="post.id" class="post">
+      <img :src="post.image_url" alt="Post Image" class="post-image" />
+      <p class="caption">{{ post.caption }}</p>
+    </div>
+        <PostSetup/>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
-import PostSetup from '@/components/PostSetup.vue'
+import PostSetup from '../components/PostSetup.vue'
 
 const posts = ref([])
 
@@ -22,15 +25,5 @@ onMounted(() => {
 })
 </script>
 
-
 <style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
 </style>
-
-

@@ -2,7 +2,7 @@
   <div v-if="loggedIn">
     <form @submit.prevent="createPost">
       <label for="image_url">Link to Image</label>
-      <input type="image" v-model="image_url" />
+      <input type="text" v-model="image_url" />
       
       <label for="caption">Caption</label>
       <input type="text" v-model="caption" />
