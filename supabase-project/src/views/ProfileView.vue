@@ -1,7 +1,5 @@
 <template>
   <div class="profile-container">
-    <h1 v-if="profiles.length" class="heading">Profiles</h1>
-
     <div class="profile-grid">
       <div v-for="profile in profiles" :key="profile.id" class="profile-card">
         <div class="profile-header">
