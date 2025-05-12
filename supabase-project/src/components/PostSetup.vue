@@ -3,7 +3,6 @@
     <form @submit.prevent="createPost">
       <label for="image_url">Link to Image</label>
       <input type="file" @change="onFileSelected" />
-      
       <label for="caption">Caption</label>
       <input type="text" v-model="caption" />
 
@@ -18,61 +17,31 @@
 import { ref } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
-const image_url = ref('')
 const caption = ref('')
+const image_url = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
-const loggedIn = ref(true)
-const file = ref(null)
-
-function onFileSelected(event) {
-  file.value = event.target.files[0]
-}
+const loggedIn = ref(true)  
 
 async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  if (!file.value) {
-    errorMessage.value = 'No image selected'
-    return
-  }
-
-  const filePath = `public/${Date.now()}_${file.value.name}`
-
-  const { error: uploadError } = await supabase
-    .storage
-    .from('images') // your bucket name
-    .upload(filePath, file.value)
-
-  if (uploadError) {
-    errorMessage.value = uploadError.message
-    return
-  }
-
-  const { data: { publicUrl } } = supabase
-    .storage
-    .from('images')
-    .getPublicUrl(filePath)
-
-  image_url.value = publicUrl
-
   const { error } = await supabase
     .from('posts')
     .insert([
       {
-        image_url: image_url.value,
-        caption: caption.value
+        caption: caption.value,
+        image_url: image_url.value
       }
     ])
 
   if (error) {
+    console.error("Error:", error.message)
     errorMessage.value = error.message
   } else {
     successMessage.value = 'Post created successfully!'
     caption.value = ''
-    image_url.value = ''
-    file.value = null
   }
 }
 </script>
