@@ -21,7 +21,39 @@ const caption = ref('')
 const image_url = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
-const loggedIn = ref(true)  
+const loggedIn = ref(true)
+
+async function onFileSelected(event) {
+  const avatarFile = event.target.files[0]
+  const filePath = `public/${Date.now()}-${avatarFile.name}`
+
+  const { data, error } = await supabase
+    .storage
+    .from('post-images')
+    .upload(filePath, avatarFile, {
+      cacheControl: '3600',
+      upsert: false
+    })
+
+  if (error) {
+    errorMessage.value = 'Image upload failed: ' + error.message
+    return
+  }
+
+  // Get public URL of the uploaded image
+  const { data: publicUrlData, error: urlError } = supabase
+    .storage
+    .from('post-images')
+    .getPublicUrl(filePath)
+
+  if (urlError) {
+    errorMessage.value = 'Image URL retrieval failed: ' + urlError.message
+    return
+  }
+
+  image_url.value = publicUrlData.publicUrl
+  successMessage.value = 'Image uploaded successfully!'
+}
 
 async function createPost() {
   successMessage.value = ''
@@ -37,11 +69,12 @@ async function createPost() {
     ])
 
   if (error) {
-    console.error("Error:", error.message)
+    console.error("Post error:", error.message)
     errorMessage.value = error.message
   } else {
     successMessage.value = 'Post created successfully!'
     caption.value = ''
+    image_url.value = ''
   }
 }
 </script>
