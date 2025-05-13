@@ -3,7 +3,6 @@
     <form @submit.prevent="createPost">
       <label for="image_url">Link to Image</label>
       <input type="file" @change="onFileSelected" />
-      
       <label for="caption">Caption</label>
       <input type="text" v-model="caption" />
 
@@ -18,61 +17,64 @@
 import { ref } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
-const image_url = ref('')
 const caption = ref('')
+const image_url = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
-const file = ref(null)
 
-function onFileSelected(event) {
-  file.value = event.target.files[0]
+async function onFileSelected(event) {
+  const avatarFile = event.target.files[0]
+  const filePath = `public/${Date.now()}-${avatarFile.name}`
+
+  const { data, error } = await supabase
+    .storage
+    .from('post-images')
+    .upload(filePath, avatarFile, {
+      cacheControl: '3600',
+      upsert: false
+    })
+
+  if (error) {
+    errorMessage.value = 'Image upload failed: ' + error.message
+    return
+  }
+
+  // Get public URL of the uploaded image
+  const { data: publicUrlData, error: urlError } = supabase
+    .storage
+    .from('post-images')
+    .getPublicUrl(filePath)
+
+  if (urlError) {
+    errorMessage.value = 'Image URL retrieval failed: ' + urlError.message
+    return
+  }
+
+  image_url.value = publicUrlData.publicUrl
+  successMessage.value = 'Image uploaded successfully!'
 }
 
 async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  if (!file.value) {
-    errorMessage.value = 'No image selected'
-    return
-  }
-
-  const filePath = `public/${Date.now()}_${file.value.name}`
-
-  const { error: uploadError } = await supabase
-    .storage
-    .from('images') // your bucket name
-    .upload(filePath, file.value)
-
-  if (uploadError) {
-    errorMessage.value = uploadError.message
-    return
-  }
-
-  const { data: { publicUrl } } = supabase
-    .storage
-    .from('images')
-    .getPublicUrl(filePath)
-
-  image_url.value = publicUrl
-
   const { error } = await supabase
     .from('posts')
     .insert([
       {
-        image_url: image_url.value,
-        caption: caption.value
+        caption: caption.value,
+        image_url: image_url.value
       }
     ])
 
   if (error) {
+    console.error("Post error:", error.message)
     errorMessage.value = error.message
   } else {
     successMessage.value = 'Post created successfully!'
     caption.value = ''
     image_url.value = ''
-    file.value = null
   }
 }
 </script>
