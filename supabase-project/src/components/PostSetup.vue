@@ -40,7 +40,6 @@ async function onFileSelected(event) {
     return
   }
 
-  // Get public URL of the uploaded image
   const { data: publicUrlData, error: urlError } = supabase
     .storage
     .from('post-images')
