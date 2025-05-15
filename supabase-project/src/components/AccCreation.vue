@@ -15,7 +15,7 @@
     </form>
 
     <h2 v-if="loggedIn">Welcome, {{ username }}!</h2>
-    <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
+    <p v-if="errorMessage">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -32,16 +32,33 @@ const errorMessage = ref('')
 const createUser = async () => {
   errorMessage.value = ''
 
-  const {  error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
     username: username.value,
-    
   })
 
   if (error) {
     errorMessage.value = 'Signup failed: ' + error.message
     return
+  }
+
+  const user = userData?.user
+
+  if (user) {
+    const { error: insertError } = await supabase.from('profiles').insert([
+      {
+        email: email.value,
+        username: username.value,
+        id: user.id,
+      },
+    ])
+
+    if (insertError) {
+      errorMessage.value = 'Profile insert failed: ' + insertError.message
+    } else {
+      loggedIn.value = true
+    }
   }
   loggedIn.value = true
 }
@@ -55,4 +72,4 @@ form {
   max-width: 300px;
   padding: 2px;
 }
-</style> 
+</style>
