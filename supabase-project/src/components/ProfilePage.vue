@@ -2,12 +2,12 @@
   <div v-if="loggedIn">
     <form @submit.prevent="createProfilePage">
       <label for="fav_artist">Favorite Artist</label>
-      <input type="file" @change="onFileSelected" />
+      <input type="file" @change="onArtistSelected" />
 
       <label for="lyric">Lyrics</label>
       <input type="text" v-model="lyric" />
       <label for="fav_album">Favorite Album</label>
-      <input type="file" @change="onFileSelected" />
+      <input type="file" @change="onAlbumSelected" />
 
       <label for="lyric">Bio</label>
       <input type="text" v-model="bio" />
@@ -60,6 +60,16 @@ async function createProfilePage() {
   let favAlbumUrl = ''
 
   try {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser()
+
+    if (userError) throw userError
+    if (!user) throw new Error('User not authenticated.')
+
+    const userId = user.id
+
     if (fav_artist_file.value) {
       const path_artist = `fav_artist_${Date.now()}_${fav_artist_file.value.name}`
       favArtistUrl = await uploadFile(path_artist, fav_artist_file.value)
@@ -70,14 +80,15 @@ async function createProfilePage() {
       favAlbumUrl = await uploadFile(path_album, fav_album_file.value)
     }
 
-    const { error } = await supabase.from('profiles').insert([
-      {
+    const { error } = await supabase
+      .from('profiles')
+      .update({
         fav_artist: favArtistUrl,
         fav_album: favAlbumUrl,
         lyric: lyric.value,
         bio: bio.value,
-      },
-    ])
+      })
+      .eq('id', userId)
 
     if (error) throw error
 
