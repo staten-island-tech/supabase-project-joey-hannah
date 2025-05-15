@@ -9,7 +9,7 @@
       <input type="password" v-model="password" />
 
       <button type="submit">Login</button>
-      <h2 v-if="loggedIn">Welcome, {{ username }}!</h2>
+      <h2 v-if="loggedIn && username">Welcome, {{ username }}!</h2>
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
     </form>
   </div>
