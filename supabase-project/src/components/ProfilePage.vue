@@ -23,68 +23,105 @@
 import { ref } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
-const fav_artist_file = ref(null)
-const fav_album_file = ref(null)
+const fav_artist_url = ref('')
+const fav_album_url = ref('')
 const lyric = ref('')
 const bio = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
 
-function onArtistFileSelected(e) {
-  fav_artist_file.value = e.target.files[0]
+async function onArtistFileSelected(event) {
+  const artistFile = event.target.files[0]
+  const filePath = `fav_artist_${Date.now()}-${artistFile.name}`
+
+  const { error: uploadError } = await supabase
+    .storage
+    .from('favartist-image')
+    .upload(filePath, artistFile, {
+      cacheControl: '3600',
+      upsert: false
+    })
+
+  if (uploadError) {
+    errorMessage.value = 'Artist image upload failed: ' + uploadError.message
+    return
+  }
+
+  const { data: publicUrlData, error: urlError } = supabase
+    .storage
+    .from('favartist-image')
+    .getPublicUrl(filePath)
+
+  if (urlError) {
+    errorMessage.value = 'Artist image URL retrieval failed: ' + urlError.message
+    return
+  }
+
+  fav_artist_url.value = publicUrlData.publicUrl
+  successMessage.value = 'Artist image uploaded successfully!'
 }
 
-function onAlbumFileSelected(e) {
-  fav_album_file.value = e.target.files[0]
-}
+async function onAlbumFileSelected(event) {
+  const albumFile = event.target.files[0]
+  const filePath = `fav_album_${Date.now()}-${albumFile.name}`
 
-async function uploadFile(path, file) {
-  const { data, error } = await supabase.storage.from('profile-assets').upload(path, file)
+  const { error: uploadError } = await supabase
+    .storage
+    .from('favalbum-image')
+    .upload(filePath, albumFile, {
+      cacheControl: '3600',
+      upsert: false
+    })
 
-  if (error) throw error
-  return data.path
+  if (uploadError) {
+    errorMessage.value = 'Album image upload failed: ' + uploadError.message
+    return
+  }
+
+  const { data: publicUrlData, error: urlError } = supabase
+    .storage
+    .from('favalbum-image')
+    .getPublicUrl(filePath)
+
+  if (urlError) {
+    errorMessage.value = 'Album image URL retrieval failed: ' + urlError.message
+    return
+  }
+
+  fav_album_url.value = publicUrlData.publicUrl
+  successMessage.value = 'Album image uploaded successfully!'
 }
 
 async function createProfilePage() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  let favArtistUrl = ''
-  let favAlbumUrl = ''
-
   try {
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError) throw authError
     if (!user) throw new Error('User not logged in.')
 
-    if (fav_artist_file.value) {
-      const path_artist = `fav_artist_${Date.now()}_${fav_artist_file.value.name}`
-      favArtistUrl = await uploadFile(path_artist, fav_artist_file.value)
-    }
-
-    if (fav_album_file.value) {
-      const path_album = `fav_album_${Date.now()}_${fav_album_file.value.name}`
-      favAlbumUrl = await uploadFile(path_album, fav_album_file.value)
-    }
-
     const { error } = await supabase
       .from('profiles')
       .update({
-        fav_artist: favArtistUrl,
-        fav_album: favAlbumUrl,
+        fav_artist: fav_artist_url.value,
+        fav_album: fav_album_url.value,
         lyric: lyric.value,
         bio: bio.value,
       })
       .eq('id', user.id)
 
-    if (error) throw error
-
-    successMessage.value = 'Profile saved successfully!'
+    if (error) {
+      errorMessage.value = error.message
+    } else {
+      successMessage.value = 'Profile saved successfully!'
+      lyric.value = ''
+      bio.value = ''
+      fav_artist_url.value = ''
+      fav_album_url.value = ''
+    }
   } catch (err) {
     console.error(err)
     errorMessage.value = err.message
