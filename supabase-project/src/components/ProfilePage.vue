@@ -1,12 +1,12 @@
 <template>
   <div v-if="loggedIn">
     <form @submit.prevent="createProfilePage">
-      <label for="fav_artist">Favorite Artist</label>
+      <label for="fav_artist_url">Favorite Artist</label>
       <input type="file" @change="onArtistFileSelected" />
 
       <label for="lyric">Lyrics</label>
       <input type="text" v-model="lyric" />
-      <label for="fav_album">Favorite Album</label>
+      <label for="fav_album_url">Favorite Album</label>
       <input type="file" @change="onAlbumFileSelected" />
 
       <label for="bio">Bio</label>
@@ -32,19 +32,19 @@ const errorMessage = ref('')
 const loggedIn = ref(true)
 
 async function onArtistFileSelected(event) {
-  const artistFile = event.target.files[0]
-  const filePath = `fav_artist_${Date.now()}-${artistFile.name}`
+  const avatarFile = event.target.files[0]
+  const filePath = `public/${Date.now()}-${avatarFile.name}`
 
-  const { error: uploadError } = await supabase
+  const { data, error } = await supabase
     .storage
     .from('favartist-image')
-    .upload(filePath, artistFile, {
+    .upload(filePath, avatarFile, {
       cacheControl: '3600',
       upsert: false
     })
 
-  if (uploadError) {
-    errorMessage.value = 'Artist image upload failed: ' + uploadError.message
+  if (error) {
+    errorMessage.value = 'Image upload failed: ' + error.message
     return
   }
 
@@ -54,28 +54,28 @@ async function onArtistFileSelected(event) {
     .getPublicUrl(filePath)
 
   if (urlError) {
-    errorMessage.value = 'Artist image URL retrieval failed: ' + urlError.message
+    errorMessage.value = 'Image URL retrieval failed: ' + urlError.message
     return
   }
 
-  fav_artist_url.value = publicUrlData.publicUrl
-  successMessage.value = 'Artist image uploaded successfully!'
+fav_artist_url.value = publicUrlData.publicUrl
+  successMessage.value = 'Image uploaded successfully!'
 }
 
 async function onAlbumFileSelected(event) {
-  const albumFile = event.target.files[0]
-  const filePath = `fav_album_${Date.now()}-${albumFile.name}`
+  const avatarFile = event.target.files[0]
+  const filePath = `public/${Date.now()}-${avatarFile.name}`
 
-  const { error: uploadError } = await supabase
+  const { data, error } = await supabase
     .storage
     .from('favalbum-image')
-    .upload(filePath, albumFile, {
+    .upload(filePath, avatarFile, {
       cacheControl: '3600',
       upsert: false
     })
 
-  if (uploadError) {
-    errorMessage.value = 'Album image upload failed: ' + uploadError.message
+  if (error) {
+    errorMessage.value = 'Image upload failed: ' + error.message
     return
   }
 
@@ -85,46 +85,38 @@ async function onAlbumFileSelected(event) {
     .getPublicUrl(filePath)
 
   if (urlError) {
-    errorMessage.value = 'Album image URL retrieval failed: ' + urlError.message
+    errorMessage.value = 'Image URL retrieval failed: ' + urlError.message
     return
   }
 
-  fav_album_url.value = publicUrlData.publicUrl
-  successMessage.value = 'Album image uploaded successfully!'
+fav_album_url.value = publicUrlData.publicUrl
+  successMessage.value = 'Image uploaded successfully!'
 }
 
-async function createProfilePage() {
+async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  try {
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+  const { error } = await supabase
+    .from('profiles')
+    .update([
+      {
+      fav_artist_url: fav_artist_url.value,
+      fav_album_url: fav_album_url.value,
+      lyric: lyric.value,
+      bio: bio.value,
+      }
+    ])
 
-    if (authError) throw authError
-    if (!user) throw new Error('User not logged in.')
-
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        fav_artist: fav_artist_url.value,
-        fav_album: fav_album_url.value,
-        lyric: lyric.value,
-        bio: bio.value,
-      })
-      .eq('id', user.id)
-
-    if (error) {
-      errorMessage.value = error.message
-    } else {
-      successMessage.value = 'Profile saved successfully!'
-      lyric.value = ''
-      bio.value = ''
-      fav_artist_url.value = ''
-      fav_album_url.value = ''
-    }
-  } catch (err) {
-    console.error(err)
-    errorMessage.value = err.message
+  if (error) {
+    console.error("Post error:", error.message)
+    errorMessage.value = error.message
+  } else {
+    successMessage.value = 'Post created successfully!'
+    fav_artist_url.value = ''
+    fav_album_url.value = ''
+    lyric.value = ''
+    bio.value = ''
   }
 }
 </script>
