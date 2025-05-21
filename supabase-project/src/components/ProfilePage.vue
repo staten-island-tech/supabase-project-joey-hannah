@@ -35,12 +35,11 @@ async function onArtistFileSelected(event) {
   const avatarFile = event.target.files[0]
   const filePath = `public/${Date.now()}-${avatarFile.name}`
 
-  const { data, error } = await supabase
-    .storage
+  const { data, error } = await supabase.storage
     .from('favartist-image')
     .upload(filePath, avatarFile, {
       cacheControl: '3600',
-      upsert: false
+      upsert: false,
     })
 
   if (error) {
@@ -48,8 +47,7 @@ async function onArtistFileSelected(event) {
     return
   }
 
-  const { data: publicUrlData, error: urlError } = supabase
-    .storage
+  const { data: publicUrlData, error: urlError } = supabase.storage
     .from('favartist-image')
     .getPublicUrl(filePath)
 
@@ -58,7 +56,7 @@ async function onArtistFileSelected(event) {
     return
   }
 
-fav_artist_url.value = publicUrlData.publicUrl
+  fav_artist_url.value = publicUrlData.publicUrl
   successMessage.value = 'Image uploaded successfully!'
 }
 
@@ -66,12 +64,11 @@ async function onAlbumFileSelected(event) {
   const avatarFile = event.target.files[0]
   const filePath = `public/${Date.now()}-${avatarFile.name}`
 
-  const { data, error } = await supabase
-    .storage
+  const { data, error } = await supabase.storage
     .from('favalbum-image')
     .upload(filePath, avatarFile, {
       cacheControl: '3600',
-      upsert: false
+      upsert: false,
     })
 
   if (error) {
@@ -79,8 +76,7 @@ async function onAlbumFileSelected(event) {
     return
   }
 
-  const { data: publicUrlData, error: urlError } = supabase
-    .storage
+  const { data: publicUrlData, error: urlError } = supabase.storage
     .from('favalbum-image')
     .getPublicUrl(filePath)
 
@@ -89,30 +85,42 @@ async function onAlbumFileSelected(event) {
     return
   }
 
-fav_album_url.value = publicUrlData.publicUrl
+  fav_album_url.value = publicUrlData.publicUrl
   successMessage.value = 'Image uploaded successfully!'
 }
 
-async function createPost() {
+async function createProfilePage() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const { error } = await supabase
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+
+  if (userError || !user) {
+    errorMessage.value = 'No user logged in.'
+    return
+  }
+
+  const userId = user.id
+  console.log('Updating user with ID:', user.id)
+
+  const { updateError } = await supabase
     .from('profiles')
-    .update([
-      {
-      fav_artist_url: fav_artist_url.value,
-      fav_album_url: fav_album_url.value,
+    .update({
+      fav_artist: fav_artist_url.value,
+      fav_album: fav_album_url.value,
       lyric: lyric.value,
       bio: bio.value,
-      }
-    ])
+    })
+    .eq('id', userId)
+    .select()
 
-  if (error) {
-    console.error("Post error:", error.message)
-    errorMessage.value = error.message
+  if (updateError) {
+    console.error('Update error:', updateError)
   } else {
-    successMessage.value = 'Post created successfully!'
+    successMessage.value = 'Profile created successfully!'
     fav_artist_url.value = ''
     fav_album_url.value = ''
     lyric.value = ''
