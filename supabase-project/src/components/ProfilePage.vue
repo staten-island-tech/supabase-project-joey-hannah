@@ -106,7 +106,7 @@ async function createProfilePage() {
   const userId = user.id
   console.log('Updating user with ID:', user.id)
 
-  const { updateError } = await supabase
+  const { data, error } = await supabase
     .from('profiles')
     .update({
       fav_artist: fav_artist_url.value,
