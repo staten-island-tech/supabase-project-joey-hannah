@@ -24,8 +24,14 @@ import HelloWorld from './components/HelloWorld.vue'
 <style scoped>
 header {
   line-height: 1.5;
-  max-height: 100vh;
+  height: 100vh;
+  width: 100%; /* Stretches to parent width */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevents internal overflow */
 }
+
 
 .logo {
   display: block;
@@ -78,9 +84,23 @@ nav a:first-of-type {
     text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
-
     padding: 1rem 0;
     margin-top: 1rem;
   }
 }
+</style>
+
+<style>
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;             /* Flex container */
+  justify-content: center;   /* Center horizontally */
+  align-items: center;       /* Center vertically */
+  overflow: hidden;          /* Prevent scrollbars */
+}
+
 </style>

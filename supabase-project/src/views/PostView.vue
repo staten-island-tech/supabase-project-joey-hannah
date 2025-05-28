@@ -27,15 +27,37 @@ onMounted(() => {
   getPosts()
 })
 </script>
-
 <style>
+.about > div:nth-child(2) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Style individual post items */
+.post {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Make the image readable but not huge */
 .post-image {
-  width: 15px;      /* super small width */
-  height: 15px;     /* super small height */
-  object-fit: cover;  /* keep aspect ratio but cropped */
-  display: block;  /* remove inline spacing */
-  margin-bottom: 5px;
-  border: 1px solid #ccc; /* optional: visible border to see the tiny image */
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Caption styling */
+.caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
 }
 
 </style>
