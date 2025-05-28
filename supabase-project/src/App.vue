@@ -94,9 +94,13 @@ nav a:first-of-type {
 html, body, #app {
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   box-sizing: border-box;
-  overflow-x: hidden; /* Optional: prevent scroll if something overflows */
+  display: flex;             /* Flex container */
+  justify-content: center;   /* Center horizontally */
+  align-items: center;       /* Center vertically */
+  overflow: hidden;          /* Prevent scrollbars */
 }
+
 </style>
