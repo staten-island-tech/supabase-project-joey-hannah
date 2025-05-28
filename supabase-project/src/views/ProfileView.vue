@@ -11,22 +11,12 @@
 
         <div class="profile-field">
           <strong>Favorite Artist:</strong><br />
-          <img
-            v-if="profile.fav_artist_url"
-            :src="`https://your-supabase-url.supabase.co/storage/v1/object/public/favartist-image/${profile.fav_artist_url}`"
-            alt="Favorite Artist"
-            class="media-image"
-          />
+          <img :src="profile.fav_artist_url" alt="Favorite Artist" class="media-image" />
         </div>
 
         <div class="profile-field">
           <strong>Favorite Album:</strong><br />
-          <img
-            v-if="profile.fav_album_url"
-            :src="`https://your-supabase-url.supabase.co/storage/v1/object/public/favalbum-image/${profile.fav_album_url}`"
-            alt="Favorite Album"
-            class="media-image"
-          />
+          <img :src="profile.fav_album_url" alt="Favorite Album" class="media-image" />
         </div>
 
         <div class="profile-field"><strong>Lyric:</strong> {{ profile.lyric }}</div>
