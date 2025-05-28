@@ -11,12 +11,12 @@
 
         <div class="profile-field">
           <strong>Favorite Artist:</strong><br />
-          <img :src="profile.fav_artist_url" alt="Favorite Artist" class="media-image" />
+          <img :src="profile.fav_artist" alt="Favorite Artist" class="media-image" />
         </div>
 
         <div class="profile-field">
           <strong>Favorite Album:</strong><br />
-          <img :src="profile.fav_album_url" alt="Favorite Album" class="media-image" />
+          <img :src="profile.fav_album" alt="Favorite Album" class="media-image" />
         </div>
 
         <div class="profile-field"><strong>Lyric:</strong> {{ profile.lyric }}</div>
@@ -43,10 +43,53 @@ onMounted(() => {
   getProfiles()
 })
 </script>
-
 <style scoped>
-img {
-  border-radius: 50%;
-  margin-top: 10px;
+.profile-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 20px;
+}
+
+.profile-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-subgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.profile-field {
+  text-align: center;
+  width: 100%;
+}
+
+.media-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 8px;
 }
 </style>
