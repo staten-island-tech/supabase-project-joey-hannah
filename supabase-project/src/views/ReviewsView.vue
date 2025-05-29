@@ -10,6 +10,7 @@ import { supabase } from '../supabaseClient.js'
 import ReviewSetup from '../components/ReviewSetup.vue'
 
 const reviews = ref([])
+
 async function getReviews() {
   const { data } = await supabase.from('reviews').select()
   reviews.value = data
