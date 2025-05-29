@@ -1,9 +1,10 @@
 <template>
   <div class="profile-container">
+    <ProfilePage />
     <div class="profile-grid">
       <div v-for="profile in profiles" :key="profile.id" class="profile-card">
-        <div class="profile-header">
-          <img :src="profile.profile_pic" alt="Profile Picture" class="profile-pic" />
+        <div class="profile-field">
+          <img :src="profile.profile_pic" alt="Profile Picture" class="media-image" />
           <h2 class="username">{{ profile.username }}</h2>
         </div>
 
@@ -22,8 +23,6 @@
         <div class="profile-field"><strong>Lyric:</strong> {{ profile.lyric }}</div>
       </div>
     </div>
-
-    <ProfilePage />
   </div>
 </template>
 
@@ -52,7 +51,7 @@ onMounted(() => {
 
 .profile-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-columns: repeat(3, 2fr);
   gap: 20px;
 }
 
