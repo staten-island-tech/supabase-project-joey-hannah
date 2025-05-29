@@ -1,8 +1,7 @@
 <template>
   <div class="about">
-        <PostSetup />
-    <div v-if="posts.length === 0">No posts available.</div>
-    <div v-else>
+    <PostSetup />
+    <div>
       <div v-for="post in posts" :key="post.id" class="post">
         <img :src="post.image_url" alt="Post Image" class="post-image" />
         <p class="caption">{{ post.caption }}</p>
@@ -11,22 +10,23 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 import PostSetup from '../components/PostSetup.vue'
 
 const posts = ref([])
+
 async function getPosts() {
   const { data } = await supabase.from('posts').select()
   posts.value = data
 }
 
 onMounted(() => {
-  getPosts()
+    getPosts()
 })
 </script>
+
 <style>
 .about > div:nth-child(2) {
   display: grid;
@@ -59,5 +59,4 @@ onMounted(() => {
   font-size: 0.9rem;
   color: #333;
 }
-
 </style>

@@ -4,8 +4,8 @@ import {useAuthStore} from '../stores/auth'
 const routes = [
   { path: '/', component: Home},  //change when we have files we want to auth
 
-  {path: '/secret-candy',
-    component: SecretCandy,
+  {path: '/posts',
+    component: PostView,
     meta: {requiresAuth: true},
   }
 ]
@@ -25,3 +25,21 @@ router.BeforeEach((to,from,next) => {
   }
 })
 
+import { defineStore } from 'pinia'
+
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    user: null
+  }),
+  getters: {
+    isLoggedIn: (state) => !!state.user
+  },
+  actions: {
+    login(userData) {
+      this.user = userData
+    },
+    logout() {
+      this.user = null
+    }
+  }
+})
