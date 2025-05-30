@@ -1,7 +1,7 @@
 <template>
   <div v-if="loggedIn">
     <form @submit.prevent="createCard">
-      <label for="image_url">Cover Image</label>
+      <label for="cover_image">Cover Image</label>
       <input type="file" @change="onFileSelected" />
       <label for="artist">Artist</label>
       <input type="text" v-model="artist" />
@@ -28,9 +28,12 @@
 import { ref } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
-const image_url = ref('')
+const cover_image = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
+const artist = ref('')
+const title = ref('')
+const year = ref('')
 const loggedIn = ref(true)
 const cardCreated = ref(false)
 
@@ -59,18 +62,20 @@ async function onFileSelected(event) {
     return
   }
 
-  image_url.value = publicUrlData.publicUrl
+  cover_image.value = publicUrlData.publicUrl
   successMessage.value = 'Image uploaded successfully!'
 }
 
-async function createPost() {
+async function createCard() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const { error } = await supabase.from('posts').insert([
+  const { error } = await supabase.from('reviews').insert([
     {
-      caption: caption.value,
-      image_url: image_url.value,
+      artist: artist.value,
+      title: title.value,
+      year: year.value,
+      cover_image: cover_image.value,
     },
   ])
 
@@ -78,9 +83,7 @@ async function createPost() {
     console.error('Post error:', error.message)
     errorMessage.value = error.message
   } else {
-    successMessage.value = 'Post created successfully!'
-    caption.value = ''
-    image_url.value = ''
+    successMessage.value = 'Review card created successfully!'
   }
 }
 </script>

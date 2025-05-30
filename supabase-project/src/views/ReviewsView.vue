@@ -1,11 +1,14 @@
 <template>
   <div>
     <ReviewSetup />
-    <div>
-      <div v-for="review in reviewsw" :key="review.id" class="post">
-        <img :src="review.cover_page" alt="Post Image" class="post-image" />
-        <p class="caption">{{ post.caption }}</p>
-      </div>
+    <div v-for="review in reviews" :key="review.id" class="post">
+      <span
+        ><h2 class="title">{{ review.title }}</h2>
+        <h2 class="year">{{ review.year }}</h2></span
+      >
+      <img :src="review.cover_image" alt="cover Image" class="cover-image" />
+      <p class="artist">{{ review.artist }}</p>
+    </div>
   </div>
 </template>
 
