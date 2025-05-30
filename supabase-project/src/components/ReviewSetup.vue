@@ -62,6 +62,27 @@ async function onFileSelected(event) {
   image_url.value = publicUrlData.publicUrl
   successMessage.value = 'Image uploaded successfully!'
 }
+
+async function createPost() {
+  successMessage.value = ''
+  errorMessage.value = ''
+
+  const { error } = await supabase.from('posts').insert([
+    {
+      caption: caption.value,
+      image_url: image_url.value,
+    },
+  ])
+
+  if (error) {
+    console.error('Post error:', error.message)
+    errorMessage.value = error.message
+  } else {
+    successMessage.value = 'Post created successfully!'
+    caption.value = ''
+    image_url.value = ''
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>
