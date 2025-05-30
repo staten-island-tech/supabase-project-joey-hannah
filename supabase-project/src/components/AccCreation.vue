@@ -32,10 +32,9 @@ const errorMessage = ref('')
 const createUser = async () => {
   errorMessage.value = ''
 
-  const { error } = await supabase.auth.signUp({
+  const { data: userData, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
-    username: username.value,
   })
 
   if (error) {
@@ -46,11 +45,11 @@ const createUser = async () => {
   const user = userData?.user
 
   if (user) {
-    const { error: insertError } = await supabase.from('profiles').insert([
+    const { error: insertError } = await supabase.from('profiles').upsert([
       {
+        id: user.id,
         email: email.value,
         username: username.value,
-        id: user.id,
       },
     ])
 
@@ -59,9 +58,11 @@ const createUser = async () => {
     } else {
       loggedIn.value = true
     }
+  } else {
+    errorMessage.value = 'No user returned from signup.'
   }
-  loggedIn.value = true
 }
+
 </script>
 
 <style scoped>

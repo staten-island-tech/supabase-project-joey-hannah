@@ -63,7 +63,7 @@ async function createPost() {
     .insert([
       {
         caption: caption.value,
-        image_url: image_url.value
+        image_url: image_url.value,
       }
     ])
 
