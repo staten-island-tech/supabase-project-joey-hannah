@@ -1,9 +1,10 @@
 <template>
   <div class="profile-container">
+    <ProfilePage />
     <div class="profile-grid">
       <div v-for="profile in profiles" :key="profile.id" class="profile-card">
-        <div class="profile-header">
-          <img :src="profile.profile_pic" alt="Profile Picture" class="profile-pic" />
+        <div class="profile-field">
+          <img :src="profile.profile_pic" alt="Profile Picture" class="media-image" />
           <h2 class="username">{{ profile.username }}</h2>
         </div>
 
@@ -11,29 +12,17 @@
 
         <div class="profile-field">
           <strong>Favorite Artist:</strong><br />
-          <img
-            v-if="profile.fav_artist_url"
-            :src="`https://your-supabase-url.supabase.co/storage/v1/object/public/favartist-image/${profile.fav_artist_url}`"
-            alt="Favorite Artist"
-            class="media-image"
-          />
+          <img :src="profile.fav_artist" alt="Favorite Artist" class="media-image" />
         </div>
 
         <div class="profile-field">
           <strong>Favorite Album:</strong><br />
-          <img
-            v-if="profile.fav_album_url"
-            :src="`https://your-supabase-url.supabase.co/storage/v1/object/public/favalbum-image/${profile.fav_album_url}`"
-            alt="Favorite Album"
-            class="media-image"
-          />
+          <img :src="profile.fav_album" alt="Favorite Album" class="media-image" />
         </div>
 
         <div class="profile-field"><strong>Lyric:</strong> {{ profile.lyric }}</div>
       </div>
     </div>
-
-    <ProfilePage />
   </div>
 </template>
 
@@ -53,10 +42,53 @@ onMounted(() => {
   getProfiles()
 })
 </script>
-
 <style scoped>
-img {
-  border-radius: 50%;
-  margin-top: 10px;
+.profile-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 2fr);
+  gap: 20px;
+}
+
+.profile-card {
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-subgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.profile-field {
+  text-align: center;
+  width: 100%;
+}
+
+.media-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 8px;
 }
 </style>
