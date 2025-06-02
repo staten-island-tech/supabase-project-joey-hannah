@@ -11,12 +11,11 @@
       <input type="text" v-model="year" />
       <button type="submit">Create Card</button>
     </form>
-    <div v-if="cardCreated">
-      <form @submit.prevent="writeReview">
-        <label for="review">Review</label>
-        <input type="text" v-model="review" />
-        <button type="submit">Save</button>
-      </form>
+
+    <div v-if="selectedCard">
+      <h2>{{ selectedCard.title }} by {{ selectedCard.artist }}</h2>
+      <textarea v-model="review" placeholder="Write your review here..." />
+      <button @click="saveReview">Save</button>
     </div>
 
     <h1 v-if="successMessage">{{ successMessage }}</h1>
@@ -34,8 +33,11 @@ const errorMessage = ref('')
 const artist = ref('')
 const title = ref('')
 const year = ref('')
+const review = ref('')
 const loggedIn = ref(true)
+
 const cardCreated = ref(false)
+const selectedCard = ref(null)
 
 async function onFileSelected(event) {
   const avatarFile = event.target.files[0]
@@ -70,22 +72,43 @@ async function createCard() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const { error } = await supabase.from('reviews').insert([
-    {
-      artist: artist.value,
-      title: title.value,
-      year: year.value,
-      cover_image: cover_image.value,
-    },
-  ])
+  const { data, error } = await supabase
+    .from('reviews')
+    .insert([
+      {
+        artist: artist.value,
+        title: title.value,
+        year: year.value,
+        cover_image: cover_image.value,
+        review: '',
+      },
+    ])
+    .select()
 
   if (error) {
     console.error('Post error:', error.message)
     errorMessage.value = error.message
   } else {
+    selectedCard.value = data[0]
+    cardCreated.value = true
     successMessage.value = 'Review card created successfully!'
   }
 }
-</script>
 
-<style lang="scss" scoped></style>
+async function saveReview() {
+  if (!selectedCard.value) return
+
+  const { error } = await supabase
+    .from('reviews')
+    .update({ review: review.value })
+    .eq('id', selectedCard.value.id)
+
+  if (error) {
+    errorMessage.value = 'Failed to save review: ' + error.message
+  } else {
+    successMessage.value = 'Review saved!'
+    selectedCard.value.review = review.value
+    selectedCard.value = null
+  }
+}
+</script>
