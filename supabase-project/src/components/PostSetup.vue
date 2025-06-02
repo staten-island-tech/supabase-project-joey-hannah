@@ -9,7 +9,7 @@
       <button type="submit">Create Post</button>
     </form>
     <h1 v-if="successMessage">{{ successMessage }}</h1>
-    <h1 v-if="errorMessage">{{ errorMessage }}</h1>  
+    <h1 v-if="errorMessage">{{ errorMessage }}</h1>
   </div>
 </template>
 
@@ -27,21 +27,17 @@ async function onFileSelected(event) {
   const avatarFile = event.target.files[0]
   const filePath = `public/${Date.now()}-${avatarFile.name}`
 
-  const { data, error } = await supabase
-    .storage
-    .from('post-images')
-    .upload(filePath, avatarFile, {
-      cacheControl: '3600',
-      upsert: false
-    })
+  const { data, error } = await supabase.storage.from('post-images').upload(filePath, avatarFile, {
+    cacheControl: '3600',
+    upsert: false,
+  })
 
   if (error) {
     errorMessage.value = 'Image upload failed: ' + error.message
     return
   }
 
-  const { data: publicUrlData, error: urlError } = supabase
-    .storage
+  const { data: publicUrlData, error: urlError } = supabase.storage
     .from('post-images')
     .getPublicUrl(filePath)
 
@@ -58,17 +54,15 @@ async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const { error } = await supabase
-    .from('posts')
-    .insert([
-      {
-        caption: caption.value,
-        image_url: image_url.value
-      }
-    ])
+  const { error } = await supabase.from('posts').insert([
+    {
+      caption: caption.value,
+      image_url: image_url.value,
+    },
+  ])
 
   if (error) {
-    console.error("Post error:", error.message)
+    console.error('Post error:', error.message)
     errorMessage.value = error.message
   } else {
     successMessage.value = 'Post created successfully!'

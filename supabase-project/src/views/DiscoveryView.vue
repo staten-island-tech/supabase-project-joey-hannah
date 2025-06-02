@@ -1,7 +1,11 @@
 <template>
-  <div></div>
+  <div>
+    <DiscoverySetup />
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import DiscoverySetup from '@/components/DiscoverySetup.vue'
+</script>
 
 <style lang="scss" scoped></style>
