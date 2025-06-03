@@ -14,27 +14,55 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
 const caption = ref('')
 const image_url = ref('')
-const username= ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
+const username = ref(null) 
+
+
+onMounted(async () => {
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+  if (authError || !user) {
+    errorMessage.value = 'Not logged in.'
+    loggedIn.value = false
+    return
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('id', user.id)
+    .single()
+
+  if (profileError || !profile) {
+    errorMessage.value = 'User profile not found.'
+    loggedIn.value = false
+    return
+  }
+
+  username.value = profile.username
+})
 
 async function onFileSelected(event) {
   const avatarFile = event.target.files[0]
-  const filePath = `public/${Date.now()}-${avatarFile.name}`
+const filePath = `public/${Date.now()}-${avatarFile.name}`
 
-  const { data, error } = await supabase.storage.from('post-images').upload(filePath, avatarFile, {
-    cacheControl: '3600',
-    upsert: false,
-  })
 
-  if (error) {
-    errorMessage.value = 'Image upload failed: ' + error.message
+  const { error: uploadError } = await supabase.storage
+    .from('post-images')
+    .upload(filePath, avatarFile, {
+      cacheControl: '3600',
+      upsert: false,
+    })
+
+  if (uploadError) {
+    errorMessage.value = 'Image upload failed: ' + uploadError.message
     return
   }
 
@@ -54,6 +82,11 @@ async function onFileSelected(event) {
 async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''
+
+  if (!username.value) {
+    errorMessage.value = 'Username not loaded. Please wait.'
+    return
+  }
 
   const { error } = await supabase
     .from('posts')
