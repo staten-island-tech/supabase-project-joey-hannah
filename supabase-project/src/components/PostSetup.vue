@@ -19,6 +19,7 @@ import { supabase } from '../supabaseClient.js'
 
 const caption = ref('')
 const image_url = ref('')
+const username= ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
@@ -54,12 +55,15 @@ async function createPost() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const { error } = await supabase.from('posts').insert([
-    {
-      caption: caption.value,
-      image_url: image_url.value,
-    },
-  ])
+  const { error } = await supabase
+    .from('posts')
+    .insert([
+      {
+        caption: caption.value,
+        image_url: image_url.value,
+        username: username.value,
+      }
+    ])
 
   if (error) {
     console.error('Post error:', error.message)
