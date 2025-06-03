@@ -2,14 +2,17 @@
   <div class="acc-login">
     <h2>Or Log In</h2>
     <form @submit.prevent="loginUser">
-      <label for="email">Email</label>
-      <input type="text" v-model="email" />
+      <label for="username">Username</label>
+      <input type="text" v-model="username" />
+
+       <label for="email">Email</label>
+      <input type="email" v-model="email" />
 
       <label for="password">Password</label>
       <input type="password" v-model="password" />
 
       <button type="submit">Login</button>
-      <h2 v-if="loggedIn && username">Welcome, {{ username }}!</h2>
+      <h2 v-if="loggedIn">Welcome, {{ username }}!</h2>
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
     </form>
   </div>
@@ -27,6 +30,7 @@ const errorMessage = ref('')
 
 const loginUser = async () => {
   const { data, error } = await supabase.auth.signInWithPassword({
+    username: username.value,
     email: email.value,
     password: password.value,
   })

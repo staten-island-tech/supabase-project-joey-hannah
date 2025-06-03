@@ -19,6 +19,7 @@ import { supabase } from '../supabaseClient.js'
 
 const caption = ref('')
 const image_url = ref('')
+const username= ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
@@ -64,6 +65,7 @@ async function createPost() {
       {
         caption: caption.value,
         image_url: image_url.value,
+        username: username.value,
       }
     ])
 
