@@ -5,6 +5,7 @@
       <div v-for="post in posts" :key="post.id" class="post">
         <img :src="post.image_url" alt="Post Image" class="post-image" />
         <p class="caption">{{ post.caption }}</p>
+        <p>Posted by: {{post.username}}</p>
       </div>
     </div>
   </div>
