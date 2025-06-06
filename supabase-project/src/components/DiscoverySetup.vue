@@ -2,6 +2,11 @@
   <div>
     <ul v-if="profiles.length">
       <li v-for="profile in allProfiles" :key="profile.id"></li>
+      <div class="card">
+        <img v-if="profile.profile_pic" :src="profile.profile_pic" alt="pfp" class="pfp" />
+        <p>@{{ profile.username }}</p>
+        <p>{{ profile.bio }}</p>
+      </div>
     </ul>
   </div>
 </template>
