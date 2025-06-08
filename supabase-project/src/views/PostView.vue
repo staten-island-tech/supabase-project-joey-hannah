@@ -2,10 +2,10 @@
   <div class="about">
     <PostSetup />
     <div>
+      <h2>Your Posts:</h2>
       <div v-for="post in posts" :key="post.id" class="post">
         <img :src="post.image_url" alt="Post Image" class="post-image" />
         <p class="caption">{{ post.caption }}</p>
-        <p>Posted by: {{post.username}}</p>
       </div>
     </div>
   </div>
@@ -13,18 +13,39 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { supabase } from '../supabaseClient.js'
+import { supabase } from '../supabaseClient'
 import PostSetup from '../components/PostSetup.vue'
+import { useAuthStore } from '../stores/auth'
 
 const posts = ref([])
+const auth = useAuthStore()
 
 async function getPosts() {
-  const { data } = await supabase.from('posts').select()
+  if (!auth.user) {
+    await auth.fetchUser()
+  }
+
+  const userId = auth.user?.id
+  if (!userId) {
+    console.warn('No user ID found.')
+    return
+  }
+
+  const { data, error } = await supabase
+    .from('posts')
+    .select()
+    .eq('user_id', userId)  
+
+  if (error) {
+    console.error('Error fetching posts:', error)
+    return
+  }
+
   posts.value = data
 }
 
 onMounted(() => {
-    getPosts()
+  getPosts()
 })
 </script>
 
@@ -36,7 +57,6 @@ onMounted(() => {
   margin-top: 1rem;
 }
 
-/* Style individual post items */
 .post {
   display: flex;
   flex-direction: column;
@@ -44,7 +64,6 @@ onMounted(() => {
   text-align: center;
 }
 
-/* Make the image readable but not huge */
 .post-image {
   width: 100%;
   max-width: 200px;
@@ -54,7 +73,6 @@ onMounted(() => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Caption styling */
 .caption {
   margin-top: 0.5rem;
   font-size: 0.9rem;

@@ -1,44 +1,38 @@
-
-import {useAuthStore} from '../stores/auth'
-
-const routes = [
-  { path: '/', component: Home},  //change when we have files we want to auth
-
-  {path: '/posts',
-    component: PostView,
-    meta: {requiresAuth: true},
-  }
-]
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-})
-
-router.BeforeEach((to,from,next) => {
-  const auth = useAuthStore()
-  if (to.meta.requiresAuth && !auth.isLoggedIn) {
-    alert('You must log in to view this')
-    next('/')
-  }else{
-    next()
-  }
-})
-
 import { defineStore } from 'pinia'
+import { supabase } from '../supabaseClient'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null
   }),
+
   getters: {
     isLoggedIn: (state) => !!state.user
   },
+
   actions: {
+
+    async fetchUser() {
+      const { data, error } = await supabase.auth.getUser()
+      if (error) {
+        console.error('Error fetching user:', error)
+        this.user = null
+      } else {
+        this.user = data.user
+      }
+    },
+
+
     login(userData) {
       this.user = userData
     },
-    logout() {
+
+    async logout() {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Logout failed:', error)
+        return
+      }
       this.user = null
     }
   }
