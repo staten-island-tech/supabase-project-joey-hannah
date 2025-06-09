@@ -16,9 +16,12 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient'
 import PostSetup from '../components/PostSetup.vue'
 import { useAuthStore } from '../stores/auth'
+import { gsap } from 'gsap'
+import { watch, nextTick } from 'vue'
 
 const posts = ref([])
 const auth = useAuthStore()
+
 
 async function getPosts() {
   if (!auth.user) {
@@ -42,7 +45,23 @@ async function getPosts() {
   }
 
   posts.value = data
+
+  await nextTick()
+
+  gsap.from('.post', {
+    opacity: 0,
+    y: 50,
+    scale: 0.8,
+    rotate: -5,
+    stagger: {
+      each: 0.1,
+      from: 'random'
+    },
+    duration: 0.8,
+    ease: 'back.out(1.7)'
+  })
 }
+
 
 onMounted(() => {
   getPosts()

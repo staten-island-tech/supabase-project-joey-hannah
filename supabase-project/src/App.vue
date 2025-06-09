@@ -92,12 +92,13 @@ body,
 #app {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
   box-sizing: border-box;
   display: flex; /* Flex container */
   justify-content: center; /* Center horizontally */
   align-items: center; /* Center vertically */
   overflow: hidden; /* Prevent scrollbars */
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
 }
 </style>

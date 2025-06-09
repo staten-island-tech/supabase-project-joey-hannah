@@ -1,18 +1,21 @@
 <template>
   <div>
-    <div>
+    <div class="posts-grid">
       <div v-for="post in posts" :key="post.id" class="post">
         <img :src="post.image_url" alt="Post Image" class="post-image" />
         <p class="caption">{{ post.caption }}</p>
-        <p>Posted by: {{post.username}}</p>
+        <p>Posted by: {{ post.username }}</p>
       </div>
     </div>
   </div>
 </template>
 
+
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
+import { gsap } from 'gsap'
+import { watch, nextTick } from 'vue'
 import DiscoverySetup from '@/components/DiscoverySetup.vue' //I am not sure what discovery setup is supposed to do but it is not working so I removed it from the template or else nothing will show up 
 
 const posts = ref([])
@@ -20,19 +23,33 @@ const posts = ref([])
 async function getPosts() {
   const { data } = await supabase.from('posts').select()
   posts.value = data
+    await nextTick()
+
+  gsap.from('.post', {
+    opacity: 0,
+    y: 50,
+    scale: 0.8,
+    rotate: -5,
+    stagger: {
+      each: 0.1,
+      from: 'random'
+    },
+    duration: 0.8,
+    ease: 'back.out(1.7)'
+  })
 }
 
 onMounted(() => {
     getPosts()
 })
 </script>
-
-<style scoped>
-.about > div:nth-child(2) {
+<style>
+.posts-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
+  padding: 0 1rem;
 }
 
 .post {
