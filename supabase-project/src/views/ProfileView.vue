@@ -30,18 +30,30 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 import ProfilePage from '@/components/ProfilePage.vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 const profiles = ref([])
+const auth = useAuthStore()
+const router = useRouter()
 
 async function getProfiles() {
   const { data } = await supabase.from('profiles').select()
   profiles.value = data
 }
 
-onMounted(() => {
+onMounted(async () => {
+  if (!auth.user) {
+    await auth.fetchUser()
+  }
+  if (!auth.user) {
+    router.replace('/')
+    return
+  }
   getProfiles()
 })
 </script>
+
 <style scoped>
 .profile-container {
   padding: 20px;

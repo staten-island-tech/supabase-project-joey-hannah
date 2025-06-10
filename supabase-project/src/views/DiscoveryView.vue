@@ -15,15 +15,18 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 import { gsap } from 'gsap'
-import { watch, nextTick } from 'vue'
-import DiscoverySetup from '@/components/DiscoverySetup.vue' //I am not sure what discovery setup is supposed to do but it is not working so I removed it from the template or else nothing will show up 
+import { nextTick } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 const posts = ref([])
+const auth = useAuthStore()
+const router = useRouter()
 
 async function getPosts() {
   const { data } = await supabase.from('posts').select()
   posts.value = data
-    await nextTick()
+  await nextTick()
 
   gsap.from('.post', {
     opacity: 0,
@@ -39,10 +42,18 @@ async function getPosts() {
   })
 }
 
-onMounted(() => {
-    getPosts()
+onMounted(async () => {
+  if (!auth.user) {
+    await auth.fetchUser()
+  }
+  if (!auth.user) {
+    router.replace('/')
+    return
+  }
+  getPosts()
 })
 </script>
+
 <style>
 .posts-grid {
   display: grid;

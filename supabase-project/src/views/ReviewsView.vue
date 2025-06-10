@@ -15,18 +15,28 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import ReviewSetup from '../components/ReviewSetup.vue'
 
 const reviews = ref([])
-const selectedCard = ref(null)
+const router = useRouter()
+const auth = useAuthStore()
 
 async function getReviews() {
   const { data } = await supabase.from('reviews').select()
   reviews.value = data
 }
 
-onMounted(getReviews)
-const router = useRouter()
+onMounted(async () => {
+  if (!auth.user) {
+    await auth.fetchUser()
+  }
+  if (!auth.user) {
+    router.replace('/')
+    return
+  }
+  getReviews()
+})
 
 function goToReview(id) {
   router.push(`/reviews/${id}`)

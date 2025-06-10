@@ -3,25 +3,39 @@ import { supabase } from '../supabaseClient'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null
+    user: null,
+    username: null,  // store username here
   }),
 
   getters: {
-    isLoggedIn: (state) => !!state.user
+    isLoggedIn: (state) => !!state.user,
   },
 
   actions: {
-
     async fetchUser() {
       const { data, error } = await supabase.auth.getUser()
-      if (error) {
+      if (error || !data.user) {
         console.error('Error fetching user:', error)
         this.user = null
+        this.username = null
+        return
+      }
+      this.user = data.user
+
+      // Now fetch username from profiles table
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', this.user.id)
+        .single()
+
+      if (profileError) {
+        console.error('Error fetching profile username:', profileError)
+        this.username = null
       } else {
-        this.user = data.user
+        this.username = profileData?.username || null
       }
     },
-
 
     login(userData) {
       this.user = userData
@@ -34,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
         return
       }
       this.user = null
-    }
-  }
+      this.username = null
+    },
+  },
 })

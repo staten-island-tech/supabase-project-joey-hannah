@@ -13,60 +13,48 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { supabase } from '../supabaseClient'
-import PostSetup from '../components/PostSetup.vue'
 import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
+import PostSetup from '../components/PostSetup.vue'
+import { supabase } from '../supabaseClient'
+import { nextTick } from 'vue'
 import { gsap } from 'gsap'
-import { watch, nextTick } from 'vue'
 
 const posts = ref([])
 const auth = useAuthStore()
-
+const router = useRouter()
 
 async function getPosts() {
-  if (!auth.user) {
-    await auth.fetchUser()
-  }
-
-  const userId = auth.user?.id
-  if (!userId) {
-    console.warn('No user ID found.')
-    return
-  }
-
-  const { data, error } = await supabase
+  const userId = auth.user.id
+  const { data } = await supabase
     .from('posts')
     .select()
-    .eq('user_id', userId)  
-
-  if (error) {
-    console.error('Error fetching posts:', error)
-    return
-  }
-
+    .eq('user_id', userId)
   posts.value = data
-
   await nextTick()
-
   gsap.from('.post', {
     opacity: 0,
     y: 50,
     scale: 0.8,
     rotate: -5,
-    stagger: {
-      each: 0.1,
-      from: 'random'
-    },
+    stagger: { each: 0.1, from: 'random' },
     duration: 0.8,
     ease: 'back.out(1.7)'
   })
 }
 
-
-onMounted(() => {
+onMounted(async () => {
+  if (!auth.user) {
+    await auth.fetchUser()
+  }
+  if (!auth.user) {
+    router.replace('/')
+    return
+  }
   getPosts()
 })
 </script>
+
 
 <style>
 .about > div:nth-child(2) {
