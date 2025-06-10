@@ -4,101 +4,60 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/reviews">Reviews</RouterLink>
-        <RouterLink to="/discovery">Discovery</RouterLink>
-        <RouterLink to="/posts">Posts</RouterLink>
-        <RouterLink to="/profile">Profile</RouterLink>
-      </nav>
-      <RouterView />
-    </div>
+    <nav class="nav-bar">
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/reviews">Reviews</RouterLink>
+      <RouterLink to="/discovery">Discovery</RouterLink>
+      <RouterLink to="/posts">Posts</RouterLink>
+      <RouterLink to="/profile">Profile</RouterLink>
+    </nav>
   </header>
+
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
 header {
-  line-height: 1.5;
-  height: 100vh;
-  width: 100%; /* Stretches to parent width */
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden; /* Prevents internal overflow */
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.nav-bar a {
+  text-decoration: none;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 </style>
 
 <style>
-html,
-body,
-#app {
+html, body, #app {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  display: flex; /* Flex container */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  overflow: hidden; /* Prevent scrollbars */
   width: 100%;
   height: 100%;
-  max-width: 100%;
+  font-family: sans-serif;
+}
+
+main {
+  padding: 5rem 1rem 1rem; 
+  min-height: 100vh;
 }
 </style>
