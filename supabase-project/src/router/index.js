@@ -12,8 +12,13 @@ const router = createRouter({
     {
       path: '/profile/:id',
       name: 'user-profile',
-      component: () => import('@/components/UserProfile.vue'),  // UserProfile in components folder
+      component: () => import('@/components/UserProfile.vue'),
       props: true,
+    },
+    {
+      path: '/profiles',
+      name: 'profiles',
+      component: () => import('@/views/ProfileView.vue'), 
     },
     {
       path: '/discovery',
