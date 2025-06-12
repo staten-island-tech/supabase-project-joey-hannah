@@ -67,39 +67,43 @@ async function onFileSelected(event) {
   cover_image.value = publicUrlData.publicUrl
   successMessage.value = 'Image uploaded successfully!'
 }
-
 async function createCard() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const userId = auth.user?.id
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  const userId = userData?.user?.id
+
+  console.log('Creating card as user:', userId)
+
   if (!userId) {
-    errorMessage.value = 'User not authenticated'
+    errorMessage.value = 'User not authenticated.'
     return
   }
 
-  const { data, error } = await supabase
-    .from('reviews')
-    .insert([
-      {
-        artist: artist.value,
-        title: title.value,
-        year: year.value,
-        cover_image: cover_image.value,
-        user_id: userId,
-        review: '',
-        rating: null,
-      },
-    ])
-    .select()
+  const insertData = {
+    artist: artist.value,
+    title: title.value,
+    year: year.value,
+    cover_image: cover_image.value,
+    review: '',
+    rating: null,
+    user_id: userId,
+  }
+
+  console.log('Insert data:', insertData)
+
+  const { data, error } = await supabase.from('reviews').insert([insertData]).select()
 
   if (error) {
-    console.error('Post error:', error.message)
-    errorMessage.value = error.message
-  } else {
-    selectedCard.value = data[0]
-    cardCreated.value = true
-    successMessage.value = 'Review card created successfully!'
+    console.error('Insert failed:', error)
+    errorMessage.value = 'Insert failed: ' + error.message
+    return
   }
+
+  console.log('Insert success:', data)
+  selectedCard.value = data[0]
+  cardCreated.value = true
+  successMessage.value = 'Review card created successfully!'
 }
 </script>

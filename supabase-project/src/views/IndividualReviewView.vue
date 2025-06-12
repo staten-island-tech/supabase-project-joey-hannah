@@ -48,11 +48,6 @@ onMounted(async () => {
 })
 
 async function saveReview() {
-  if (!review.value) return
-  console.log('review.value:', review.value)
-  console.log('review.value.id:', review.value.id)
-  console.log('updatedReviewText.value:', updatedReviewText.value)
-  console.log('rating.value:', rating.value)
   const { data, error } = await supabase
     .from('reviews')
     .update({

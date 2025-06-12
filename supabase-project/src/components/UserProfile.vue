@@ -18,6 +18,18 @@
             <p>{{ post.caption }}</p>
           </div>
         </div>
+
+        <h3>Reviews by {{ profile.username }}:</h3>
+        <div v-if="reviews.length === 0">NO REVIEWS FOUND</div>
+        <div v-else class="reviews-grid">
+          <div v-for="review in reviews" :key="review.id" class="review">
+            <img :src="review.cover_image" />
+            <h2>{{ review.title }} ({{ review.year }})</h2>
+            <p>{{ review.artist }}</p>
+            <p>{{ review.rating }}</p>
+            <p>{{ review.review }}</p>
+          </div>
+        </div>
       </div>
       <div v-else>
         <p>Profile not found.</p>
@@ -37,6 +49,7 @@ const userId = route.params.id
 
 const profile = ref(null)
 const posts = ref([])
+const reviews = ref([])
 const loading = ref(true)
 
 async function fetchProfileAndPosts() {
@@ -70,6 +83,18 @@ async function fetchProfileAndPosts() {
     posts.value = []
   } else {
     posts.value = postsData
+  }
+
+  const { data: reviewsData, error: reviewsError } = await supabase
+    .from('reviews')
+    .select()
+    .eq('user_id', userId)
+
+  if (reviewsError) {
+    console.error('Error fetching revs:', reviewsError)
+    reviews.value = []
+  } else {
+    reviews.value = reviewsData
   }
 
   loading.value = false
