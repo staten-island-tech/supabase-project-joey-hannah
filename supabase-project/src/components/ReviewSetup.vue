@@ -72,6 +72,12 @@ async function createCard() {
   successMessage.value = ''
   errorMessage.value = ''
 
+  const userId = auth.user?.id
+  if (!userId) {
+    errorMessage.value = 'User not authenticated'
+    return
+  }
+
   const { data, error } = await supabase
     .from('reviews')
     .insert([
@@ -80,7 +86,9 @@ async function createCard() {
         title: title.value,
         year: year.value,
         cover_image: cover_image.value,
+        user_id: userId,
         review: '',
+        rating: null,
       },
     ])
     .select()
@@ -92,23 +100,6 @@ async function createCard() {
     selectedCard.value = data[0]
     cardCreated.value = true
     successMessage.value = 'Review card created successfully!'
-  }
-}
-
-async function saveReview() {
-  if (!selectedCard.value) return
-
-  const { error } = await supabase
-    .from('reviews')
-    .update({ review: review.value })
-    .eq('id', selectedCard.value.id)
-
-  if (error) {
-    errorMessage.value = 'Failed to save review: ' + error.message
-  } else {
-    successMessage.value = 'Review saved!'
-    selectedCard.value.review = review.value
-    selectedCard.value = null
   }
 }
 </script>

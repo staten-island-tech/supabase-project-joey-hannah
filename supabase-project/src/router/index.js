@@ -10,9 +10,14 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/ProfileView.vue'),
+    },
+    {
       path: '/profile/:id',
       name: 'user-profile',
-      component: () => import('@/components/UserProfile.vue'),  // UserProfile in components folder
+      component: () => import('@/components/UserProfile.vue'), // UserProfile in components folder
       props: true,
     },
     {

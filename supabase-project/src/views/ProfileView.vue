@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container p-6">
+  <div class="profile-container p-6" v-if="auth.user">
     <ProfilePage />
 
     <div class="profile-grid grid grid-cols-2 grid-rows-3 gap-6">
@@ -55,69 +55,29 @@ const auth = useAuthStore()
 const router = useRouter()
 
 async function getProfiles() {
-  const { data } = await supabase.from('profiles').select()
-  profiles.value = data
+  const userId = auth.user?.id
+  if (!userId) return
+
+  const { data, error } = await supabase.from('profiles').select().eq('id', userId).single()
+
+  if (error) {
+    console.error('Error fetching profile:', error.message)
+    return
+  }
+
+  profiles.value = [data]
 }
 
 onMounted(async () => {
   if (!auth.user) {
     await auth.fetchUser()
   }
+
   if (!auth.user) {
     router.replace('/')
     return
   }
-  getProfiles()
+
+  await getProfiles()
 })
 </script>
-
-<style scoped>
-.profile-container {
-  padding: 20px;
-  max-width: 1400px;
-  margin: auto;
-}
-
-.profile-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 2fr);
-  gap: 20px;
-}
-
-.profile-card {
-  border: 1px solid #ccc;
-  padding: 16px;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-subgrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-  margin-top: 12px;
-}
-
-.profile-field {
-  text-align: center;
-  width: 100%;
-}
-
-.media-image {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-top: 8px;
-}
-</style>
