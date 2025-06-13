@@ -193,13 +193,10 @@ async function fetchProfileAndPosts() {
   profile.value = profileData
 
   const { data: postsData } = await supabase.from('posts').select('*').eq('user_id', userId)
-
   posts.value = postsData
 
   const { data: reviewsData } = await supabase.from('reviews').select('*').eq('user_id', userId)
-
   reviews.value = reviewsData
-
   loading.value = false
 }
 

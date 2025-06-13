@@ -13,8 +13,8 @@
           class="text-indigo-800 font-semibold hover:text-indigo-600 hover:underline mb-2"
         >
           @{{ post.username }}
+          <p class="text-gray-700 text-sm italic mb-1">bio: {{ post.profiles.bio }}</p>
         </router-link>
-
         <p class="text-gray-700 text-sm flex-grow">{{ post.caption }}</p>
 
         <img
@@ -37,6 +37,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { supabase } from '../supabaseClient'
+import FollowerSetup from '@/components/FollowerSetup.vue'
 
 const router = useRouter()
 const posts = ref([])
@@ -47,8 +48,12 @@ onMounted(async () => {
     router.replace('/')
     return
   }
-
-  const { data, error } = await supabase.from('posts').select()
+  const { data, error } = await supabase.from('posts').select(`
+    *,
+    profiles (
+      bio
+    )
+  `)
   if (error) {
     console.error('Error fetching posts:', error)
   } else {
