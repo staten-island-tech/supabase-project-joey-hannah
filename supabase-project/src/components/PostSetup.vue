@@ -22,11 +22,13 @@ const image_url = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 const loggedIn = ref(true)
-const username = ref(null) 
-
+const username = ref(null)
 
 onMounted(async () => {
-  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser()
 
   if (authError || !user) {
     errorMessage.value = 'Not logged in.'
@@ -51,8 +53,7 @@ onMounted(async () => {
 
 async function onFileSelected(event) {
   const avatarFile = event.target.files[0]
-const filePath = `public/${Date.now()}-${avatarFile.name}`
-
+  const filePath = `public/${Date.now()}-${avatarFile.name}`
 
   const { error: uploadError } = await supabase.storage
     .from('post-images')
@@ -88,15 +89,13 @@ async function createPost() {
     return
   }
 
-  const { error } = await supabase
-    .from('posts')
-    .insert([
-      {
-        caption: caption.value,
-        image_url: image_url.value,
-        username: username.value,
-      }
-    ])
+  const { error } = await supabase.from('posts').insert([
+    {
+      caption: caption.value,
+      image_url: image_url.value,
+      username: username.value,
+    },
+  ])
 
   if (error) {
     console.error('Post error:', error.message)

@@ -5,7 +5,7 @@
       <h2>Your Posts:</h2>
       <div v-for="post in posts" :key="post.id" class="post">
         <img :src="post.image_url" alt="Post Image" class="post-image" />
-        <p class="caption">{{ post.caption }}</p>
+        <p class="caption text-7xl">{{ post.caption }}</p>
       </div>
     </div>
   </div>
@@ -26,10 +26,7 @@ const router = useRouter()
 
 async function getPosts() {
   const userId = auth.user.id
-  const { data } = await supabase
-    .from('posts')
-    .select()
-    .eq('user_id', userId)
+  const { data } = await supabase.from('posts').select().eq('user_id', userId)
   posts.value = data
   await nextTick()
   gsap.from('.post', {
@@ -39,7 +36,7 @@ async function getPosts() {
     rotate: -5,
     stagger: { each: 0.1, from: 'random' },
     duration: 0.8,
-    ease: 'back.out(1.7)'
+    ease: 'back.out(1.7)',
   })
 }
 
@@ -55,9 +52,8 @@ onMounted(async () => {
 })
 </script>
 
-
 <style>
-.about > div:nth-child(2) {
+/* .about > div:nth-child(2) {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
@@ -84,5 +80,5 @@ onMounted(async () => {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   color: #333;
-}
+} */
 </style>

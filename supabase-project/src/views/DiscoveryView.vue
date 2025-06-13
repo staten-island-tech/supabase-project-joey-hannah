@@ -18,9 +18,7 @@ import { supabase } from '../supabaseClient'
 const posts = ref([])
 
 onMounted(async () => {
-  const { data, error } = await supabase
-    .from('posts')
-    .select()
+  const { data, error } = await supabase.from('posts').select()
   if (error) {
     console.error('Error fetching posts:', error)
   } else {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex gap-4 justify-center items-start p-4">
     <AccCreation />
     <AccLogin />
   </div>

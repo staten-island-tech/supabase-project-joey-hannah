@@ -9,7 +9,7 @@
       <input type="text" v-model="title" />
       <label for="year">Year</label>
       <input type="text" v-model="year" />
-      <button type="submit">Create Card</button>
+      <button type="submit" class="">Create Card</button>
     </form>
 
     <div v-if="selectedCard">
