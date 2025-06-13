@@ -1,39 +1,73 @@
 <template>
-  <div class="user-profile-page">
-    <button @click="goBack" class="back-button">← Back to Discovery</button>
+  <div class="max-w-3xl mx-auto p-6">
+    <button
+      @click="goBack"
+      class="mb-6 text-indigo-600 hover:text-indigo-800 font-semibold transition cursor-pointer"
+    >
+      ← Back to Discovery
+    </button>
 
-    <div v-if="loading">Loading profile...</div>
+    <div v-if="loading" class="text-center text-gray-500">Loading profile...</div>
 
     <div v-else>
-      <div v-if="profile">
-        <img :src="profile.profile_pic" alt="Profile Picture" class="profile-pic" />
-        <h2>{{ profile.username }}</h2>
-        <p>{{ profile.bio }}</p>
-
-        <h3>Posts by {{ profile.username }}:</h3>
-        <div v-if="posts.length === 0">No posts found.</div>
-        <div v-else class="posts-grid">
-          <div v-for="post in posts" :key="post.id" class="post">
-            <img :src="post.image_url" alt="Post Image" />
-            <p>{{ post.caption }}</p>
-          </div>
+      <div v-if="profile" class="space-y-6">
+        <div class="flex flex-col items-center">
+          <img
+            :src="profile.profile_pic"
+            alt="Profile Picture"
+            class="w-36 h-36 rounded-full object-cover mb-4 shadow-md"
+          />
+          <h2 class="text-3xl font-bold text-gray-900">{{ profile.username }}</h2>
+          <p class="text-gray-700 text-center max-w-xl mt-2">{{ profile.bio }}</p>
         </div>
 
-        <h3>Reviews by {{ profile.username }}:</h3>
-        <div v-if="reviews.length === 0">NO REVIEWS FOUND</div>
-        <div v-else class="reviews-grid">
-          <div v-for="review in reviews" :key="review.id" class="review">
-            <img :src="review.cover_image" />
-            <h2>{{ review.title }} ({{ review.year }})</h2>
-            <p>{{ review.artist }}</p>
-            <p>{{ review.rating }}</p>
-            <p>{{ review.review }}</p>
+        <section>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Posts by {{ profile.username }}:</h3>
+          <div v-if="posts.length === 0" class="text-gray-500 italic">No posts found.</div>
+          <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div
+              v-for="post in posts"
+              :key="post.id"
+              class="rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+            >
+              <img
+                :src="post.image_url"
+                alt="Post Image"
+                class="w-full h-40 object-cover"
+              />
+              <p class="p-2 text-gray-800 truncate">{{ post.caption }}</p>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">Reviews by {{ profile.username }}:</h3>
+          <div v-if="reviews.length === 0" class="text-gray-500 italic">No reviews found.</div>
+          <div v-else class="space-y-6">
+            <div
+              v-for="review in reviews"
+              :key="review.id"
+              class="flex flex-col sm:flex-row items-start gap-4 bg-white rounded-lg shadow p-4"
+            >
+              <img
+                :src="review.cover_image"
+                alt="Review Cover"
+                class="w-28 h-28 object-cover rounded"
+              />
+              <div>
+                <h2 class="text-lg font-bold text-gray-900">
+                  {{ review.title }} ({{ review.year }})
+                </h2>
+                <p class="text-indigo-600 font-semibold">{{ review.artist }}</p>
+                <p class="text-yellow-500 font-semibold">Rating: {{ review.rating }}/5</p>
+                <p class="mt-2 text-gray-700 whitespace-pre-line">{{ review.review }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-      <div v-else>
-        <p>Profile not found.</p>
-      </div>
+
+      <div v-else class="text-center text-red-600 font-semibold">Profile not found.</div>
     </div>
   </div>
 </template>
@@ -58,7 +92,6 @@ async function fetchProfileAndPosts() {
     return
   }
 
-  // Fetch profile
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
     .select()
@@ -72,7 +105,6 @@ async function fetchProfileAndPosts() {
   }
   profile.value = profileData
 
-  // Fetch posts for this user
   const { data: postsData, error: postsError } = await supabase
     .from('posts')
     .select()
@@ -91,7 +123,7 @@ async function fetchProfileAndPosts() {
     .eq('user_id', userId)
 
   if (reviewsError) {
-    console.error('Error fetching revs:', reviewsError)
+    console.error('Error fetching reviews:', reviewsError)
     reviews.value = []
   } else {
     reviews.value = reviewsData
@@ -106,36 +138,3 @@ function goBack() {
 
 onMounted(fetchProfileAndPosts)
 </script>
-
-<style scoped>
-.user-profile-page {
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem 1rem;
-}
-
-.back-button {
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.profile-pic {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 1rem;
-}
-
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-.post img {
-  width: 100%;
-  border-radius: 8px;
-  object-fit: cover;
-}
-</style>
