@@ -8,7 +8,7 @@
     >
       <router-link
         :to="{ name: 'user-profile', params: { id: post.user_id } }"
-        class="text-indigo-600 font-semibold hover:underline"
+        class="text-purple-800 font-semibold hover:text-purple-400 hover:underline"
       >
         {{ post.username }}
       </router-link>
@@ -21,6 +21,7 @@
     </div>
   </div>
 </template>
+
 
 
 

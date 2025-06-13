@@ -17,7 +17,7 @@
             alt="Profile Picture"
             class="w-36 h-36 rounded-full object-cover mb-4 shadow-md"
           />
-          <h2 class="text-3xl font-bold text-gray-900">{{ profile.username }}</h2>
+          <h2 class="text-3xl font-bold text-purple-800">{{ profile.username }}</h2>
           <p class="text-gray-700 text-center max-w-xl mt-2">{{ profile.bio }}</p>
         </div>
 
