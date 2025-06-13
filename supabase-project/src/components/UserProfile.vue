@@ -5,32 +5,89 @@
     <div v-if="loading">Loading profile...</div>
 
     <div v-else>
-      <div v-if="profile">
-        <img :src="profile.profile_pic" alt="Profile Picture" class="profile-pic" />
-        <h2>{{ profile.username }}</h2>
-        <p>{{ profile.bio }}</p>
+      <div v-if="profile" class="flex flex-wrap gap-8 justify-center">
+        <div class="profile-grid grid grid-cols-2 justify-center grid-rows-3 gap-4 p-4">
+          <div class="tile w-[200px] h-[200px] overflow-hidden rounded-lg shadow">
+            <img
+              :src="profile.profile_pic"
+              alt="Profile Picture"
+              class="w-full h-full object-cover"
+            />
+          </div>
 
-        <h3>Posts by {{ profile.username }}:</h3>
-        <div v-if="posts.length === 0">No posts found.</div>
-        <div v-else class="posts-grid">
-          <div v-for="post in posts" :key="post.id" class="post">
-            <img :src="post.image_url" alt="Post Image" />
-            <p>{{ post.caption }}</p>
+          <div
+            class="tile bg-white w-[200px] h-[200px] rounded-lg shadow flex items-center justify-center text-center"
+          >
+            <h2 class="text-plum text-lg font-semibold">@{{ profile.username }}</h2>
+          </div>
+
+          <div
+            class="tile bg-white w-[200px] h-[200px] rounded-lg shadow p-4 flex items-center justify-center text-center"
+          >
+            <p class="text-plum text-lg">{{ profile.bio }}</p>
+          </div>
+
+          <div class="tile w-[200px] h-[200px] overflow-hidden rounded-lg shadow">
+            <img
+              :src="profile.fav_artist"
+              alt="Favorite Artist"
+              class="w-full h-full object-cover"
+            />
+          </div>
+
+          <div class="tile w-[200px] h-[200px] overflow-hidden rounded-lg shadow">
+            <img :src="profile.fav_album" alt="Favorite Album" class="w-full h-full object-cover" />
+          </div>
+
+          <div
+            class="tile bg-white w-[200px] h-[200px] rounded-lg shadow p-4 flex items-center justify-center text-center"
+          >
+            <p class="text-plum italic text-lg">“{{ profile.lyric }}”</p>
           </div>
         </div>
 
-        <h3>Reviews by {{ profile.username }}:</h3>
-        <div v-if="reviews.length === 0">NO REVIEWS FOUND</div>
-        <div v-else class="reviews-grid">
-          <div v-for="review in reviews" :key="review.id" class="review">
-            <img :src="review.cover_image" />
-            <h2>{{ review.title }} ({{ review.year }})</h2>
-            <p>{{ review.artist }}</p>
-            <p>{{ review.rating }}</p>
-            <p>{{ review.review }}</p>
+        <!-- POSTS SECTION -->
+        <section class="w-full max-w-5xl mt-8">
+          <h3 class="mb-4 text-xl font-semibold">Posts by {{ profile.username }}:</h3>
+          <div v-if="posts.length === 0" class="text-gray-500">No posts found.</div>
+          <div v-else class="posts-grid grid grid-cols-3 gap-4">
+            <div v-for="post in posts" :key="post.id" class="post">
+              <img
+                :src="post.image_url"
+                alt="Post Image"
+                class="w-[200px] h-[200px] rounded-lg object-cover mb-2"
+              />
+              <p class="text-sm text-gray-700">{{ post.caption }}</p>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <!-- REVIEWS SECTION -->
+        <section class="w-full max-w-5xl mt-12">
+          <h3 class="mb-4 text-xl font-semibold">Reviews by {{ profile.username }}:</h3>
+          <div v-if="reviews.length === 0" class="text-gray-500">NO REVIEWS FOUND</div>
+          <div v-else class="reviews-grid grid grid-cols-3 gap-6">
+            <div
+              v-for="review in reviews"
+              :key="review.id"
+              class="review rounded-lg shadow p-4 bg-white flex flex-col items-center"
+            >
+              <img
+                :src="review.cover_image"
+                alt="Cover Image"
+                class="w-[180px] h-[180px] object-cover rounded-md mb-4"
+              />
+              <h2 class="text-lg font-semibold text-plum text-center mb-1">
+                {{ review.title }} ({{ review.year }})
+              </h2>
+              <p class="text-sm text-gray-600 mb-1">{{ review.artist }}</p>
+              <p class="text-sm font-medium text-yellow-500 mb-2">Rating: {{ review.rating }}</p>
+              <p class="text-sm text-gray-700 text-center">Review: {{ review.review }}</p>
+            </div>
+          </div>
+        </section>
       </div>
+
       <div v-else>
         <p>Profile not found.</p>
       </div>
@@ -75,7 +132,7 @@ async function fetchProfileAndPosts() {
   // Fetch posts for this user
   const { data: postsData, error: postsError } = await supabase
     .from('posts')
-    .select()
+    .select('*')
     .eq('user_id', userId)
 
   if (postsError) {
@@ -87,7 +144,7 @@ async function fetchProfileAndPosts() {
 
   const { data: reviewsData, error: reviewsError } = await supabase
     .from('reviews')
-    .select()
+    .select('*')
     .eq('user_id', userId)
 
   if (reviewsError) {
@@ -107,35 +164,4 @@ function goBack() {
 onMounted(fetchProfileAndPosts)
 </script>
 
-<style scoped>
-.user-profile-page {
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem 1rem;
-}
-
-.back-button {
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.profile-pic {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 1rem;
-}
-
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1rem;
-}
-
-.post img {
-  width: 100%;
-  border-radius: 8px;
-  object-fit: cover;
-}
-</style>
+<style scoped></style>

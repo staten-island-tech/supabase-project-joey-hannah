@@ -1,25 +1,60 @@
 <template>
-  <div v-if="loggedIn">
-    <form @submit.prevent="createCard">
-      <label for="cover_image">Cover Image</label>
-      <input type="file" @change="onFileSelected" />
-      <label for="artist">Artist</label>
-      <input type="text" v-model="artist" />
-      <label for="title">Title</label>
-      <input type="text" v-model="title" />
-      <label for="year">Year</label>
-      <input type="text" v-model="year" />
-      <button type="submit" class="">Create Card</button>
+  <div v-if="loggedIn" class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <form @submit.prevent="createCard" class="space-y-4">
+      <div>
+        <label for="cover_image" class="block text-sm font-medium text-gray-700 mb-1"
+          >Cover Image</label
+        >
+        <label
+          class="flex items-center justify-center w-full px-4 py-2 bg-indigo-100 text-indigo-700 border border-indigo-300 rounded-md cursor-pointer hover:bg-indigo-200 transition"
+          for="cover_image"
+        >
+          <span>Select Image</span>
+          <input type="file" id="cover_image" @change="onFileSelected" class="hidden" />
+        </label>
+      </div>
+
+      <div>
+        <label for="artist" class="block text-sm font-medium text-gray-700 mb-1">Artist</label>
+        <input
+          type="text"
+          id="artist"
+          v-model="artist"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <input
+          type="text"
+          id="title"
+          v-model="title"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="year" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+        <input
+          type="text"
+          id="year"
+          v-model="year"
+          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition"
+      >
+        Create Card
+      </button>
     </form>
 
-    <div v-if="selectedCard">
-      <h2>{{ selectedCard.title }} by {{ selectedCard.artist }}</h2>
-      <textarea v-model="review" placeholder="Write your review here..." />
-      <button @click="saveReview">Save</button>
+    <div class="mt-4 text-center space-y-2">
+      <h1 v-if="successMessage" class="text-green-600 font-semibold">{{ successMessage }}</h1>
+      <h1 v-if="errorMessage" class="text-red-600 font-semibold">{{ errorMessage }}</h1>
     </div>
-
-    <h1 v-if="successMessage">{{ successMessage }}</h1>
-    <h1 v-if="errorMessage">{{ errorMessage }}</h1>
   </div>
 </template>
 
