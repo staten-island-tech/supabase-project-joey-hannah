@@ -13,7 +13,6 @@ onMounted(() => {
   }
 })
 
-// Show username only if logged in, else null (no "Guest")
 const username = computed(() => auth.username || null)
 
 function toggleMenu() {
@@ -37,7 +36,6 @@ function logout() {
         <RouterLink to="/profile">Profile</RouterLink>
       </div>
 
-      <!-- Only show username if logged in -->
       <div
         v-if="username"
         class="username"
@@ -101,7 +99,6 @@ header {
   color: #555;
 }
 
-/* Dropdown menu styles */
 .dropdown-menu {
   position: absolute;
   right: 0;

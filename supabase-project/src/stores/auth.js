@@ -4,7 +4,7 @@ import { supabase } from '../supabaseClient'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
-    username: null,  // store username here
+    username: null,  
   }),
 
   getters: {
@@ -22,7 +22,6 @@ export const useAuthStore = defineStore('auth', {
       }
       this.user = data.user
 
-      // Now fetch username from profiles table
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('username')
