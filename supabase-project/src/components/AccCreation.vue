@@ -59,6 +59,11 @@ const errorMessage = ref('')
 const createUser = async () => {
   errorMessage.value = ''
 
+  if (!username.value || !email.value || !password.value) {
+    errorMessage.value = 'All fields are required.'
+    return
+  }
+
   const { data: userData, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
@@ -75,12 +80,13 @@ const createUser = async () => {
     const { error: insertError } = await supabase.from('profiles').upsert([
       {
         id: user.id,
-        email: email.value,
         username: username.value,
+        email: email.value,
       },
     ])
 
     if (insertError) {
+      console.error('Insert error:', insertError)
       errorMessage.value = 'Profile insert failed: ' + insertError.message
     } else {
       loggedIn.value = true
@@ -89,6 +95,7 @@ const createUser = async () => {
     errorMessage.value = 'No user returned from signup.'
   }
 }
+
 </script>
 
 <style scoped>
