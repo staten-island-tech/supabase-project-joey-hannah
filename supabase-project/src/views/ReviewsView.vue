@@ -1,16 +1,37 @@
 <template>
-  <div>
+  <div class="max-w-3xl mx-auto p-6 space-y-6">
     <ReviewSetup />
-    <div v-for="review in reviews" :key="review.id" class="post">
-      <img :src="review.cover_image" class="cover-image" />
-      <h2>{{ review.title }} ({{ review.year }})</h2>
-      <p>{{ review.artist }}</p>
-      <p v-if="review.rating !== null">{{ review.rating }}/10</p>
-      <p v-if="review.review">{{ review.review }}</p>
-      <button @click="goToReview(review.id)">View Review</button>
+
+    <div
+      v-for="review in reviews"
+      :key="review.id"
+      class="post bg-white rounded-lg shadow-md p-4 flex space-x-6 items-start"
+    >
+      <img
+        :src="review.cover_image"
+        alt="Cover Image"
+        class="w-40 h-40 object-cover rounded-md flex-shrink-0"
+      />
+      <div class="flex flex-col flex-grow space-y-2">
+        <h2 class="text-xl font-semibold text-gray-800">{{ review.title }} ({{ review.year }})</h2>
+        <p class="text-gray-600 font-medium">{{ review.artist }}</p>
+        <p v-if="review.rating !== null" class="text-indigo-600 font-semibold">
+          {{ review.rating }}/10
+        </p>
+        <p v-if="review.review" class="text-gray-700 whitespace-pre-wrap">
+          {{ review.review }}
+        </p>
+        <button
+          @click="goToReview(review.id)"
+          class="self-start mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded transition"
+        >
+          View Review
+        </button>
+      </div>
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabaseClient.js'

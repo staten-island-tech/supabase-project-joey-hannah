@@ -30,18 +30,16 @@
               :key="post.id"
               class="rounded-lg overflow-hidden shadow hover:shadow-lg transition"
             >
-              <img
-                :src="post.image_url"
-                alt="Post Image"
-                class="w-full h-40 object-cover"
-              />
+              <img :src="post.image_url" alt="Post Image" class="w-full h-40 object-cover" />
               <p class="p-2 text-gray-800 truncate">{{ post.caption }}</p>
             </div>
           </div>
         </section>
 
         <section>
-          <h3 class="text-xl font-semibold text-gray-900 mb-3">Reviews by {{ profile.username }}:</h3>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">
+            Reviews by {{ profile.username }}:
+          </h3>
           <div v-if="reviews.length === 0" class="text-gray-500 italic">No reviews found.</div>
           <div v-else class="space-y-6">
             <div
@@ -107,7 +105,7 @@ async function fetchProfileAndPosts() {
 
   const { data: postsData, error: postsError } = await supabase
     .from('posts')
-    .select()
+    .select('*')
     .eq('user_id', userId)
 
   if (postsError) {
@@ -119,7 +117,7 @@ async function fetchProfileAndPosts() {
 
   const { data: reviewsData, error: reviewsError } = await supabase
     .from('reviews')
-    .select()
+    .select('*')
     .eq('user_id', userId)
 
   if (reviewsError) {
@@ -138,3 +136,5 @@ function goBack() {
 
 onMounted(fetchProfileAndPosts)
 </script>
+
+<style scoped></style>

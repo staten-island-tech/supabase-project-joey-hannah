@@ -7,11 +7,7 @@
           class="flex items-center justify-center w-full px-4 py-2 bg-indigo-100 text-indigo-700 border border-indigo-300 rounded-md cursor-pointer hover:bg-indigo-200 transition"
         >
           <span>Select Image</span>
-          <input
-            type="file"
-            @change="onFileSelected"
-            class="hidden"
-          />
+          <input type="file" @change="onFileSelected" class="hidden" />
         </label>
       </div>
       <div>
@@ -35,8 +31,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script setup>
 import { ref, onMounted } from 'vue'
