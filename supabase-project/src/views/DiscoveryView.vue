@@ -37,23 +37,28 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { supabase } from '../supabaseClient'
-import FollowerSetup from '@/components/FollowerSetup.vue'
 
 const router = useRouter()
 const posts = ref([])
 const auth = useAuthStore()
 
 onMounted(async () => {
+  const userId = auth.user?.id
   if (!auth.isLoggedIn) {
     router.replace('/')
     return
   }
-  const { data, error } = await supabase.from('posts').select(`
+  const { data, error } = await supabase
+    .from('posts')
+    .select(
+      `
     *,
     profiles (
       bio
     )
-  `)
+  `,
+    )
+    .neq('user_id', userId)
   if (error) {
     console.error('Error fetching posts:', error)
   } else {

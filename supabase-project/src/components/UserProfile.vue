@@ -28,12 +28,23 @@
             class="w-36 h-36 rounded-full object-cover mb-4 shadow-md"
           />
           <h2 class="text-3xl font-bold text-gray-900">{{ profile.username }}</h2>
+          <p class="text-sm text-gray-600 mb-2 text-center">
+            <span class="font-semibold text-indigo-700">{{ followerCount }}</span>
+            follower<span v-if="followerCount !== 1">s</span>
+            &nbsp;|&nbsp;
+            <span class="font-semibold text-indigo-700">{{ followingCount }}</span>
+            following
+          </p>
+          <FollowerSetup
+            v-if="profile"
+            :targetUserId="profile.id"
+            @follow-change="fetchFollowCounts"
+          />
           <p class="text-gray-700 text-center max-w-xl mt-2">{{ profile.bio }}</p>
           <p class="text-gray-700 text-sm text-center max-w-xl mt-2 italic">
             "{{ profile.lyric }}"
           </p>
         </div>
-
         <section>
           <h3 class="text-xl font-semibold text-gray-900 mb-3">Posts by {{ profile.username }}:</h3>
           <div v-if="posts.length === 0" class="text-gray-500 italic">No posts found.</div>
@@ -142,16 +153,38 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '../supabaseClient'
+import FollowerSetup from '@/components/FollowerSetup.vue'
 
 const route = useRoute()
 const router = useRouter()
 const userId = route.params.id
-
 const profile = ref(null)
 const posts = ref([])
 const reviews = ref([])
 const loading = ref(true)
 const filterCategory = ref('all')
+const followerCount = ref(0)
+const followingCount = ref(0)
+
+async function fetchFollowCounts() {
+  if (!userId) return
+
+  const { count: followers, error: followerError } = await supabase
+    .from('followers')
+    .select('*', { count: 'exact', head: true })
+    .eq('following_id', userId)
+
+  if (followerError) console.error('Error fetching follower count:', followerError)
+  else followerCount.value = followers
+
+  const { count: following, error: followingError } = await supabase
+    .from('followers')
+    .select('*', { count: 'exact', head: true })
+    .eq('follower_id', userId)
+
+  if (followingError) console.error('Error fetching following count:', followingError)
+  else followingCount.value = following
+}
 
 function getRatingColor(rating) {
   if (rating <= 4) return 'text-red-500'
@@ -204,7 +237,10 @@ function goBack() {
   router.push('/discovery')
 }
 
-onMounted(fetchProfileAndPosts)
+onMounted(async () => {
+  await fetchProfileAndPosts()
+  await fetchFollowCounts()
+})
 </script>
 
 <style scoped></style>
