@@ -1,7 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto p-6 space-y-6">
-    <ReviewSetup />
-
+    <ReviewSetup @review-created="getReviews" />
     <div
       v-for="review in reviews"
       :key="review.id"

@@ -7,6 +7,8 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '@/supabaseClient'
 
+const emit = defineEmits(['follow-change'])
+
 const props = defineProps({
   targetUserId: String,
 })

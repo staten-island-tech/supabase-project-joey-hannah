@@ -62,6 +62,8 @@
 import { ref } from 'vue'
 import { supabase } from '../supabaseClient.js'
 
+const emit = defineEmits(['review-created'])
+
 const cover_image = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
@@ -140,5 +142,7 @@ async function createCard() {
   selectedCard.value = data[0]
   cardCreated.value = true
   successMessage.value = 'Review card created successfully!'
+
+  emit('review-created', data[0])
 }
 </script>
