@@ -1,18 +1,16 @@
 <template>
   <div class="discovery max-w-5xl mx-auto px-6 py-10">
-    <h1 class="text-3xl font-extrabold mb-8 text-center text-purple-900">Discovery</h1>
+    <h1 class="text-3xl font-extrabold mb-8 text-center text-indigo-900">Discovery</h1>
 
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
-    >
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <div
         v-for="post in posts"
         :key="post.id"
-        class="post-item bg-white rounded-lg shadow-md p-4 border border-purple-200 hover:shadow-lg transition-shadow duration-300 flex flex-col"
+        class="post-item bg-white rounded-lg shadow-md p-4 border border-indigo-200 hover:shadow-lg transition-shadow duration-300 flex flex-col"
       >
         <router-link
           :to="{ name: 'user-profile', params: { id: post.user_id } }"
-          class="text-purple-800 font-semibold hover:text-purple-600 hover:underline mb-2"
+          class="text-indigo-800 font-semibold hover:text-indigo-600 hover:underline mb-2"
         >
           @{{ post.username }}
         </router-link>
