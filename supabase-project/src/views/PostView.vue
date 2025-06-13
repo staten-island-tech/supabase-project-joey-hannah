@@ -46,7 +46,7 @@ onMounted(async () => {
     return
   }
 
-  const { data, error } = await supabase.from('posts').select()
+  const { data, error } = await supabase.from('posts').select().eq('user_id', auth.user.id)
   if (error) {
     console.error('Error fetching posts:', error)
   } else {
