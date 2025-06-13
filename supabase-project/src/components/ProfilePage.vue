@@ -2,17 +2,6 @@
   <div v-if="loggedIn" class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md space-y-4">
     <form @submit.prevent="createProfilePage" class="space-y-4">
       <div>
-        <label for="fav_artist_url" class="block text-sm font-medium text-gray-700 mb-1">
-          Favorite Artist
-        </label>
-        <input
-          type="file"
-          @change="onArtistFileSelected"
-          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
-        />
-      </div>
-
-      <div>
         <label for="profile_pic_url" class="block text-sm font-medium text-gray-700 mb-1">
           Profile Picture
         </label>
@@ -24,11 +13,13 @@
       </div>
 
       <div>
-        <label for="lyric" class="block text-sm font-medium text-gray-700 mb-1">Lyrics</label>
+        <label for="fav_artist_url" class="block text-sm font-medium text-gray-700 mb-1">
+          Favorite Artist
+        </label>
         <input
-          type="text"
-          v-model="lyric"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          type="file"
+          @change="onArtistFileSelected"
+          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
         />
       </div>
 
@@ -48,6 +39,15 @@
         <input
           type="text"
           v-model="bio"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="lyric" class="block text-sm font-medium text-gray-700 mb-1">Lyrics</label>
+        <input
+          type="text"
+          v-model="lyric"
           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
