@@ -1,13 +1,15 @@
 <template>
   <div class="about px-4 py-6">
     <PostSetup />
+
     <div>
       <h2 class="text-2xl font-semibold mb-4">Your Posts:</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         <div
-          v-for="post in posts"
+          v-for="(post, index) in posts"
           :key="post.id"
           class="post flex flex-col items-center text-center"
+          :ref="el => postRefs[index] = el"
         >
           <img
             :src="post.image_url"
@@ -57,8 +59,8 @@ onMounted(async () => {
     gsap.from(postRefs.value, {
       duration: 0.8,
       opacity: 0,
-      scale: 0.8,
-      stagger: 0.15,
+      y: 30,
+      stagger: 0.2,
       ease: 'power2.out',
     })
   }
