@@ -1,6 +1,5 @@
 <template>
   <div class="max-w-3xl mx-auto p-6">
-    <!-- Back Button -->
     <button
       @click="goBack"
       class="mb-6 text-indigo-600 hover:text-indigo-800 font-semibold transition cursor-pointer"
@@ -8,11 +7,9 @@
       ← Back to Discovery
     </button>
 
-    <!-- Loading State -->
     <div v-if="loading" class="text-center text-gray-500">Loading profile...</div>
 
     <div v-else>
-      <!-- Profile Details -->
       <div v-if="profile" class="space-y-6">
         <div class="flex flex-col items-center">
           <img
@@ -37,7 +34,6 @@
           </p>
         </div>
 
-        <!-- Posts Section -->
         <section>
           <h3 class="text-xl font-semibold text-gray-900 mb-3">Posts by {{ profile.username }}:</h3>
           <div v-if="posts.length === 0" class="text-gray-500 italic">No posts found.</div>
@@ -53,23 +49,58 @@
           </div>
         </section>
 
-        <!-- Reviews Section -->
         <section>
           <h3 class="text-xl font-semibold text-gray-900 mb-3">
             Reviews by {{ profile.username }}:
           </h3>
 
-          <!-- Filter Buttons -->
           <div class="flex gap-4 mb-4 justify-center">
-            <button @click="filterCategory = 'all'" :class="['px-3 py-1 rounded']">All</button>
-            <button @click="filterCategory = 'low'" :class="['px-3 py-1 rounded']">
-              Low (0-4)
+            <button
+              @click="filterCategory = 'all'"
+              :class="[
+                'px-3 py-1 rounded font-semibold transition',
+                filterCategory === 'all'
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-indigo-100',
+              ]"
+            >
+              All
             </button>
-            <button @click="filterCategory = 'medium'" :class="['px-3 py-1 rounded']">
-              Medium (4-7)
+
+            <button
+              @click="filterCategory = 'low'"
+              :class="[
+                'px-3 py-1 rounded font-semibold transition',
+                filterCategory === 'low'
+                  ? 'bg-red-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-red-100',
+              ]"
+            >
+              Low (0–4)
             </button>
-            <button @click="filterCategory = 'high'" :class="['px-3 py-1 rounded']">
-              High (7-10)
+
+            <button
+              @click="filterCategory = 'medium'"
+              :class="[
+                'px-3 py-1 rounded font-semibold transition',
+                filterCategory === 'medium'
+                  ? 'bg-yellow-400 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-yellow-100',
+              ]"
+            >
+              Medium (4–7)
+            </button>
+
+            <button
+              @click="filterCategory = 'high'"
+              :class="[
+                'px-3 py-1 rounded font-semibold transition',
+                filterCategory === 'high'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-green-100',
+              ]"
+            >
+              High (7–10)
             </button>
           </div>
 
@@ -134,7 +165,7 @@ const filteredAndSortedReviews = computed(() => {
   if (filterCategory.value === 'low') {
     filtered = filtered.filter((rev) => rev.rating <= 4)
   } else if (filterCategory.value === 'medium') {
-    filtered = filtered.filter((rev) => rev.rating > 4 && r.rating <= 7)
+    filtered = filtered.filter((rev) => rev.rating > 4 && rev.rating <= 7)
   } else if (filterCategory.value === 'high') {
     filtered = filtered.filter((rev) => rev.rating > 7)
   }
