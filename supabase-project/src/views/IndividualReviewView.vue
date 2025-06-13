@@ -1,17 +1,14 @@
 <template>
   <div v-if="review">
-    <h1>{{ review.title }}</h1>
-    <img :src="review.cover_image" />
-    <p>{{ review.artist }} ({{ review.year }})</p>
+    <h1>{{ review.title }} - {{ review.artist }} ({{ review.year }})</h1>
     <label for="rating">Rating: </label>
-    <input type="number" step="0.1" min="0" max="10" v-model.number="rating" />
+    <input class="mb-5" type="number" step="0.1" min="0" max="10" v-model.number="rating" />
     <textarea
       v-model="updatedReviewText"
       rows="5"
       cols="50"
       placeholder="Edit your review..."
     ></textarea>
-
     <button @click="saveReview">Save & Return</button>
   </div>
 
@@ -19,7 +16,6 @@
     <p>Review not found.</p>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

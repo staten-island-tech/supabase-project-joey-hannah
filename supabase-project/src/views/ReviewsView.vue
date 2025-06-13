@@ -25,7 +25,13 @@
           @click="goToReview(review.id)"
           class="self-start mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded transition"
         >
-          View Review
+          Edit Review
+        </button>
+        <button
+          @click="deleteReview(review.id)"
+          class="self-start mt-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition"
+        >
+          Delete
         </button>
       </div>
     </div>
@@ -70,5 +76,18 @@ onMounted(async () => {
 
 function goToReview(id) {
   router.push(`/reviews/${id}`)
+}
+
+async function deleteReview(id) {
+  const confirmed = confirm('Confirm: I want to delete this review')
+  if (!confirmed) return
+
+  const { error } = await supabase.from('reviews').delete().eq('id', id)
+
+  if (error) {
+    console.error('Error deleting review:', error.message)
+  } else {
+    reviews.value = reviews.value.filter((review) => review.id !== id)
+  }
 }
 </script>

@@ -4,13 +4,23 @@
     <div>
       <h2 class="text-2xl font-semibold mb-4">Your Posts:</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        <div v-for="post in posts" :key="post.id" class="post flex flex-col items-center text-center">
+        <div
+          v-for="post in posts"
+          :key="post.id"
+          class="post flex flex-col items-center text-center"
+        >
           <img
             :src="post.image_url"
             alt="Post Image"
             class="w-full max-w-[200px] aspect-square object-cover rounded-lg shadow-md"
           />
           <p class="caption mt-2 text-gray-800 text-sm">{{ post.caption }}</p>
+          <button
+            @click="deletePost(post.id)"
+            class="mt-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded text-sm transition"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -41,4 +51,17 @@ onMounted(async () => {
     posts.value = data
   }
 })
+
+async function deletePost(id) {
+  const confirmed = confirm('Confirm: I want to delete this post')
+  if (!confirmed) return
+
+  const { error } = await supabase.from('posts').delete().eq('id', id)
+
+  if (error) {
+    console.error('Error deleting post:', error.message)
+  } else {
+    posts.value = posts.value.filter((post) => post.id !== id)
+  }
+}
 </script>
