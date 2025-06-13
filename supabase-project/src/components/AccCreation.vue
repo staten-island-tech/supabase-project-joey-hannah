@@ -1,46 +1,46 @@
 <template>
-  <div class="min-h-screen bg-plum flex items-center justify-center p-6">
-    <div class="bg-cream p-8 rounded-lg shadow-lg w-full max-w-md h-[500px]">
-      <h2 class="text-2xl font-bold text-plum mb-6 text-center">Create Account</h2>
+  <div class="min-h-screen bg-indigo-100 flex items-center justify-center p-6">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md h-[500px]">
+      <h2 class="text-2xl font-bold text-indigo-700 mb-6 text-center">Create Account</h2>
       <form @submit.prevent="createUser" class="space-y-4">
         <div>
-          <label class="block text-plum font-semibold mb-1" for="username">Username</label>
+          <label class="block text-indigo-700 font-semibold mb-1" for="username">Username</label>
           <input
             type="text"
             v-model="username"
-            class="w-full px-4 py-2 border border-lilac rounded-md focus:outline-none focus:ring-2 focus:ring-lilac"
+            class="w-full px-4 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </div>
 
         <div>
-          <label class="block text-plum font-semibold mb-1" for="email">Email</label>
+          <label class="block text-indigo-700 font-semibold mb-1" for="email">Email</label>
           <input
             type="text"
             v-model="email"
-            class="w-full px-4 py-2 border border-lilac rounded-md focus:outline-none focus:ring-2 focus:ring-lilac"
+            class="w-full px-4 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </div>
 
         <div>
-          <label class="block text-plum font-semibold mb-1" for="password">Password</label>
+          <label class="block text-indigo-700 font-semibold mb-1" for="password">Password</label>
           <input
             type="password"
             v-model="password"
-            class="w-full px-4 py-2 border border-lilac rounded-md focus:outline-none focus:ring-2 focus:ring-lilac"
+            class="w-full px-4 py-2 border border-indigo-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </div>
 
         <button
           type="submit"
-          class="w-full bg-scarlet hover:bg-crimson text-cream font-semibold py-2 px-4 rounded-md transition duration-200"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200"
         >
           Create Account
         </button>
 
-        <h2 v-if="loggedIn" class="text-plum font-semibold text-center mt-4">
+        <h2 v-if="loggedIn" class="text-indigo-700 font-semibold text-center mt-4">
           Welcome, {{ username }}!
         </h2>
-        <p v-if="errorMessage" class="text-crimson text-center">{{ errorMessage }}</p>
+        <p v-if="errorMessage" class="text-red-600 text-center">{{ errorMessage }}</p>
       </form>
     </div>
   </div>
@@ -95,7 +95,6 @@ const createUser = async () => {
     errorMessage.value = 'No user returned from signup.'
   }
 }
-
 </script>
 
 <style scoped>
