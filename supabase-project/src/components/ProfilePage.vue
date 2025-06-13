@@ -30,7 +30,7 @@
         <input
           type="file"
           @change="onAlbumFileSelected"
-          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-plum-700 hover:file:bg-indigo-200"
+          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
         />
       </div>
 
