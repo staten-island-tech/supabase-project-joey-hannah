@@ -102,7 +102,6 @@ form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-width: 300px;
   padding: 2px;
 }
 </style>

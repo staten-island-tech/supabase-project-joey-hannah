@@ -1,24 +1,36 @@
 <template>
-  <div class="discovery max-w-4xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Discovery</h1>
+  <div class="discovery max-w-5xl mx-auto px-6 py-10">
+    <h1 class="text-3xl font-extrabold mb-8 text-center text-purple-900">Discovery</h1>
+
     <div
-      v-for="post in posts"
-      :key="post.id"
-      class="post-item mb-8 border-b pb-6 last:border-b-0 last:pb-0"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
     >
-      <router-link
-        :to="{ name: 'user-profile', params: { id: post.user_id } }"
-        class="text-purple-800 font-semibold hover:text-purple-400 hover:underline"
+      <div
+        v-for="post in posts"
+        :key="post.id"
+        class="post-item bg-white rounded-lg shadow-md p-4 border border-purple-200 hover:shadow-lg transition-shadow duration-300 flex flex-col"
       >
-        {{ post.username }}
-      </router-link>
-      <p class="mt-2 text-gray-700">{{ post.caption }}</p>
-      <img
-        :src="post.image_url"
-        alt="Post Image"
-        class="mt-3 w-full max-w-[300px] aspect-square rounded-lg shadow-md object-cover"
-      />
+        <router-link
+          :to="{ name: 'user-profile', params: { id: post.user_id } }"
+          class="text-purple-800 font-semibold hover:text-purple-600 hover:underline mb-2"
+        >
+          @{{ post.username }}
+        </router-link>
+
+        <p class="text-gray-700 text-sm flex-grow">{{ post.caption }}</p>
+
+        <img
+          v-if="post.image_url"
+          :src="post.image_url"
+          alt="Post Image"
+          class="mt-3 w-full h-48 object-cover rounded-md"
+        />
+      </div>
     </div>
+
+    <p v-if="!posts.length" class="text-center text-gray-500 mt-12">
+      No posts to show yet. Check back later!
+    </p>
   </div>
 </template>
 
