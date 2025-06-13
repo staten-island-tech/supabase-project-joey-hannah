@@ -1,11 +1,17 @@
 <template>
-  <div class="about">
+  <div class="about px-4 py-6">
     <PostSetup />
     <div>
-      <h2>Your Posts:</h2>
-      <div v-for="post in posts" :key="post.id" class="post">
-        <img :src="post.image_url" alt="Post Image" class="post-image" />
-        <p class="caption text-7xl">{{ post.caption }}</p>
+      <h2 class="text-2xl font-semibold mb-4">Your Posts:</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+        <div v-for="post in posts" :key="post.id" class="post flex flex-col items-center text-center">
+          <img
+            :src="post.image_url"
+            alt="Post Image"
+            class="w-full max-w-[200px] aspect-square object-cover rounded-lg shadow-md"
+          />
+          <p class="caption mt-2 text-gray-800 text-sm">{{ post.caption }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -13,72 +19,26 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useRouter } from 'vue-router'
 import PostSetup from '../components/PostSetup.vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 import { supabase } from '../supabaseClient'
-import { nextTick } from 'vue'
-import { gsap } from 'gsap'
 
+const router = useRouter()
 const posts = ref([])
 const auth = useAuthStore()
-const router = useRouter()
-
-async function getPosts() {
-  const userId = auth.user.id
-  const { data } = await supabase.from('posts').select().eq('user_id', userId)
-  posts.value = data
-  await nextTick()
-  gsap.from('.post', {
-    opacity: 0,
-    y: 50,
-    scale: 0.8,
-    rotate: -5,
-    stagger: { each: 0.1, from: 'random' },
-    duration: 0.8,
-    ease: 'back.out(1.7)',
-  })
-}
 
 onMounted(async () => {
-  if (!auth.user) {
-    await auth.fetchUser()
-  }
-  if (!auth.user) {
+  if (!auth.isLoggedIn) {
     router.replace('/')
     return
   }
-  getPosts()
+
+  const { data, error } = await supabase.from('posts').select()
+  if (error) {
+    console.error('Error fetching posts:', error)
+  } else {
+    posts.value = data
+  }
 })
 </script>
-
-<style>
-/* .about > div:nth-child(2) {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.post {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.post-image {
-  width: 100%;
-  max-width: 200px;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.caption {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #333;
-} */
-</style>
