@@ -26,107 +26,52 @@ function logout() {
 </script>
 
 <template>
-  <header>
-    <nav class="nav-bar">
-      <div class="nav-links">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/reviews">Reviews</RouterLink>
-        <RouterLink to="/discovery">Discovery</RouterLink>
-        <RouterLink to="/posts">Posts</RouterLink>
-        <RouterLink to="/profile">Profile</RouterLink>
+  <header class="fixed top-0 left-0 w-full bg-white z-[1000] shadow-sm">
+    <nav class="flex justify-center items-center gap-4 px-8 py-4 relative text-base">
+      <div class="flex gap-4 flex-grow justify-center">
+        <RouterLink to="/" class="text-gray-800 hover:bg-gray-100 rounded px-3 py-1 transition">
+          Home
+        </RouterLink>
+        <RouterLink to="/reviews" class="text-gray-800 hover:bg-gray-100 rounded px-3 py-1 transition">
+          Reviews
+        </RouterLink>
+        <RouterLink to="/discovery" class="text-gray-800 hover:bg-gray-100 rounded px-3 py-1 transition">
+          Discovery
+        </RouterLink>
+        <RouterLink to="/posts" class="text-gray-800 hover:bg-gray-100 rounded px-3 py-1 transition">
+          Posts
+        </RouterLink>
+        <RouterLink to="/profile" class="text-gray-800 hover:bg-gray-100 rounded px-3 py-1 transition">
+          Profile
+        </RouterLink>
       </div>
 
       <div
         v-if="username"
-        class="username"
         @click="toggleMenu"
-        style="cursor: pointer; position: relative"
+        class="font-semibold text-gray-600 cursor-pointer absolute right-8"
       >
         {{ username }}
 
-        <div v-if="showMenu" class="dropdown-menu">
-          <button @click.stop="logout">Logout</button>
+        <div
+          v-if="showMenu"
+          class="absolute right-0 top-full mt-2 bg-white border border-gray-300 rounded shadow-md min-w-[100px] z-10"
+        >
+          <button
+            @click.stop="logout"
+            class="w-full text-left px-4 py-2 font-semibold text-gray-700 hover:bg-gray-100"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </nav>
   </header>
 
-  <main>
+  <main class="pt-20 px-4 min-h-screen">
     <RouterView />
   </main>
 </template>
-
-<style scoped>
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.nav-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  position: relative;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1rem;
-  flex-grow: 1;
-  justify-content: center;
-}
-
-.nav-bar a {
-  text-decoration: none;
-  color: #333;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-
-.username {
-  position: absolute;
-  right: 2rem;
-  font-weight: 600;
-  color: #555;
-}
-
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-  min-width: 100px;
-}
-
-.dropdown-menu button {
-  background: none;
-  border: none;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  text-align: left;
-  cursor: pointer;
-  font-weight: 600;
-  color: #333;
-}
-
-.dropdown-menu button:hover {
-  background-color: #f0f0f0;
-}
-</style>
 
 <style>
 html,
@@ -138,10 +83,5 @@ body,
   width: 100%;
   height: 100%;
   font-family: sans-serif;
-}
-
-main {
-  padding: 5rem 1rem 1rem;
-  min-height: 100vh;
 }
 </style>

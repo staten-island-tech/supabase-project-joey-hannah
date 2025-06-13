@@ -1,8 +1,12 @@
 <template>
-  <div class="profile-container p-6" v-if="auth.user">
-    <ProfilePage />
+  <div class="profile-container p-6 flex flex-col lg:flex-row lg:gap-12 justify-center items-stretch" v-if="auth.user">
+    <!-- Profile form/component -->
+    <div class="flex-shrink-0 w-full lg:w-1/3 h-full">
+      <ProfilePage class="h-full" />
+    </div>
 
-    <div class="profile-grid flex flex-wrap gap-8 justify-center">
+    <!-- Profile grid -->
+    <div class="profile-grid flex flex-wrap gap-8 justify-center w-full lg:w-2/3 h-full">
       <div
         v-for="profile in profiles"
         :key="profile.id"
@@ -45,6 +49,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script setup>
 import { ref, onMounted } from 'vue'
