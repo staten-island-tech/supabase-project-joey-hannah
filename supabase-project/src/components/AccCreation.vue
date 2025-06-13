@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-plum flex items-center justify-center p-6">
+  <div class="min-h-screen bg-plum flex items-center justify-center p-6 w-[500px]">
     <div class="bg-cream p-8 rounded-lg shadow-lg w-full max-w-md h-[500px]">
       <h2 class="text-2xl font-bold text-plum mb-6 text-center">Create Account</h2>
-      <form @submit.prevent="createUser" class="space-y-4">
+      <form @submit.prevent="createUser" class="space-y-4 max-w-md mx-auto">
         <div>
           <label class="block text-plum font-semibold mb-1" for="username">Username</label>
           <input
@@ -95,7 +95,6 @@ const createUser = async () => {
     errorMessage.value = 'No user returned from signup.'
   }
 }
-
 </script>
 
 <style scoped>
@@ -103,7 +102,6 @@ form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-width: 300px;
   padding: 2px;
 }
 </style>
