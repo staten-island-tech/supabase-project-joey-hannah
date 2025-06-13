@@ -17,8 +17,22 @@
             alt="Profile Picture"
             class="w-36 h-36 rounded-full object-cover mb-4 shadow-md"
           />
+          <img
+            :src="profile.fav_artist"
+            alt="Profile Picture"
+            class="w-36 h-36 rounded-full object-cover mb-4 shadow-md"
+          />
+
+          <img
+            :src="profile.fav_album"
+            alt="Profile Picture"
+            class="w-36 h-36 rounded-full object-cover mb-4 shadow-md"
+          />
           <h2 class="text-3xl font-bold text-gray-900">{{ profile.username }}</h2>
           <p class="text-gray-700 text-center max-w-xl mt-2">{{ profile.bio }}</p>
+          <p class="text-gray-700 text-sm text-center max-w-xl mt-2 italic">
+            "{{ profile.lyric }}""
+          </p>
         </div>
 
         <section>
@@ -57,8 +71,8 @@
                   {{ review.title }} ({{ review.year }})
                 </h2>
                 <p class="text-indigo-600 font-semibold">{{ review.artist }}</p>
-                <p class="text-yellow-500 font-semibold">Rating: {{ review.rating }}/5</p>
-                <p class="mt-2 text-gray-700 whitespace-pre-line">{{ review.review }}</p>
+                <p class="text-yellow-500 font-semibold">Rating: {{ review.rating }}/10</p>
+                <p class="mt-2 text-gray-700 whitespace-pre-line">Review: {{ review.review }}</p>
               </div>
             </div>
           </div>
