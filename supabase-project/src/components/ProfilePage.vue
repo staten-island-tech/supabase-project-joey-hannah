@@ -1,24 +1,71 @@
 <template>
-  <div v-if="loggedIn">
-    <form @submit.prevent="createProfilePage">
-      <label for="fav_artist_url">Favorite Artist</label>
-      <input type="file" @change="onArtistFileSelected" />
+  <div v-if="loggedIn" class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md space-y-4">
+    <form @submit.prevent="createProfilePage" class="space-y-4">
+      <div>
+        <label for="fav_artist_url" class="block text-sm font-medium text-gray-700 mb-1">
+          Favorite Artist
+        </label>
+        <input
+          type="file"
+          @change="onArtistFileSelected"
+          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
+        />
+      </div>
 
-      <label for="profile_pic_url">Profile Picture</label>
-      <input type="file" @change="onPicFileSelected" />
+      <div>
+        <label for="profile_pic_url" class="block text-sm font-medium text-gray-700 mb-1">
+          Profile Picture
+        </label>
+        <input
+          type="file"
+          @change="onPicFileSelected"
+          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200"
+        />
+      </div>
 
-      <label for="lyric">Lyrics</label>
-      <input type="text" v-model="lyric" />
-      <label for="fav_album_url">Favorite Album</label>
-      <input type="file" @change="onAlbumFileSelected" />
+      <div>
+        <label for="lyric" class="block text-sm font-medium text-gray-700 mb-1">Lyrics</label>
+        <input
+          type="text"
+          v-model="lyric"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
 
-      <label for="bio">Bio</label>
-      <input type="text" v-model="bio" />
+      <div>
+        <label for="fav_album_url" class="block text-sm font-medium text-gray-700 mb-1">
+          Favorite Album
+        </label>
+        <input
+          type="file"
+          @change="onAlbumFileSelected"
+          class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-indigo-100 file:text-plum-700 hover:file:bg-indigo-200"
+        />
+      </div>
 
-      <button type="submit">Save Profile</button>
+      <div>
+        <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+        <input
+          type="text"
+          v-model="bio"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Save Profile
+      </button>
     </form>
-    <h1 v-if="successMessage">{{ successMessage }}</h1>
-    <h1 v-if="errorMessage">{{ errorMessage }}</h1>
+
+    <h1 v-if="successMessage" class="text-green-600 text-sm font-medium mt-4">
+      {{ successMessage }}
+    </h1>
+    <h1 v-if="errorMessage" class="text-red-600 text-sm font-medium mt-4">
+      {{ errorMessage }}
+    </h1>
   </div>
 </template>
 

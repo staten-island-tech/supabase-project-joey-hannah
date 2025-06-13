@@ -10,6 +10,11 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/ProfileView.vue'),
+    },
+    {
       path: '/profile/:id',
       name: 'user-profile',
       component: () => import('@/components/UserProfile.vue'),
@@ -18,7 +23,7 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('@/views/ProfileView.vue'), 
+      component: () => import('@/views/ProfileView.vue'),
     },
     {
       path: '/discovery',

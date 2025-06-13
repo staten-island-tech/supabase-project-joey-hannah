@@ -9,7 +9,7 @@
       <input type="text" v-model="title" />
       <label for="year">Year</label>
       <input type="text" v-model="year" />
-      <button type="submit">Create Card</button>
+      <button type="submit" class="">Create Card</button>
     </form>
 
     <div v-if="selectedCard">
@@ -67,48 +67,43 @@ async function onFileSelected(event) {
   cover_image.value = publicUrlData.publicUrl
   successMessage.value = 'Image uploaded successfully!'
 }
-
 async function createCard() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  const { data, error } = await supabase
-    .from('reviews')
-    .insert([
-      {
-        artist: artist.value,
-        title: title.value,
-        year: year.value,
-        cover_image: cover_image.value,
-        review: '',
-      },
-    ])
-    .select()
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  const userId = userData?.user?.id
+
+  console.log('Creating card as user:', userId)
+
+  if (!userId) {
+    errorMessage.value = 'User not authenticated.'
+    return
+  }
+
+  const insertData = {
+    artist: artist.value,
+    title: title.value,
+    year: year.value,
+    cover_image: cover_image.value,
+    review: '',
+    rating: null,
+    user_id: userId,
+  }
+
+  console.log('Insert data:', insertData)
+
+  const { data, error } = await supabase.from('reviews').insert([insertData]).select()
 
   if (error) {
-    console.error('Post error:', error.message)
-    errorMessage.value = error.message
-  } else {
-    selectedCard.value = data[0]
-    cardCreated.value = true
-    successMessage.value = 'Review card created successfully!'
+    console.error('Insert failed:', error)
+    errorMessage.value = 'Insert failed: ' + error.message
+    return
   }
-}
 
-async function saveReview() {
-  if (!selectedCard.value) return
-
-  const { error } = await supabase
-    .from('reviews')
-    .update({ review: review.value })
-    .eq('id', selectedCard.value.id)
-
-  if (error) {
-    errorMessage.value = 'Failed to save review: ' + error.message
-  } else {
-    successMessage.value = 'Review saved!'
-    selectedCard.value.review = review.value
-    selectedCard.value = null
-  }
+  console.log('Insert success:', data)
+  selectedCard.value = data[0]
+  cardCreated.value = true
+  successMessage.value = 'Review card created successfully!'
 }
 </script>

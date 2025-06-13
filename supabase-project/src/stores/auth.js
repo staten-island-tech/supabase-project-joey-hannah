@@ -4,7 +4,7 @@ import { supabase } from '../supabaseClient'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
-    username: null,  
+    username: null,
   }),
 
   getters: {

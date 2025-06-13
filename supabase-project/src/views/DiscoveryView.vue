@@ -22,11 +22,6 @@ const posts = ref([])
 const auth = useAuthStore()
 
 onMounted(async () => {
-  await auth.fetchUser()
-  if (!auth.isLoggedIn) {
-    router.push('/')
-    return
-  }
   const { data, error } = await supabase.from('posts').select()
   if (error) {
     console.error('Error fetching posts:', error)

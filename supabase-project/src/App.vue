@@ -40,7 +40,7 @@ function logout() {
         v-if="username"
         class="username"
         @click="toggleMenu"
-        style="cursor: pointer; position: relative;"
+        style="cursor: pointer; position: relative"
       >
         {{ username }}
 
@@ -64,7 +64,7 @@ header {
   width: 100%;
   background-color: white;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .nav-bar {
@@ -107,7 +107,7 @@ header {
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-top: 0.5rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   z-index: 10;
   min-width: 100px;
 }
@@ -129,7 +129,9 @@ header {
 </style>
 
 <style>
-html, body, #app {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   box-sizing: border-box;

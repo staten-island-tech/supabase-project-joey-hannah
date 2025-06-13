@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+<<<<<<< HEAD =======
 <template>
   <div></div>
 </template>
