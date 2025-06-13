@@ -59,8 +59,9 @@ onMounted(async () => {
       profiles (
         bio
       )
-    `
+    `,
     )
+    .neq('user_id', auth.user.id)
 
   if (error) {
     console.error('Error fetching posts:', error)
