@@ -1,9 +1,8 @@
-<<<<<<< HEAD =======
 <template>
-  <div></div>
 </template>
 
-<script setup></script>
+<script setup>
+</script>
 
-<style lang="scss" scoped></style>
->>>>>>> main
+<style scoped>
+</style>
